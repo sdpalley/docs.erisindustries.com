@@ -10,7 +10,7 @@
     "mocha": "^2.3.4"
   },
   "scripts": {
-    "pretest": "cd ../contractsdeploying; ./commands.sh",
-    "test": "mocha"
+    "pretest": "cd ../contracts-deploying; ./commands.sh",
+    "test": "cp -r . ~/.eris/apps/idi/; cp ~/.eris/chains/simplechain/accounts.json ~/.eris/apps/idi/; cd ~/.eris/apps/idi/; mocha"
   }
 }

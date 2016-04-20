@@ -17,16 +17,14 @@ var hostname = child_process.execSync('docker-machine ip default',
 var erisdbURL = "http://" + hostname + ":1337/rpc";
 
 // get the abi and deployed data squared away
-var contractData = require(untildify('~/.eris/apps/idi/epm.json'));
+var contractData = require('./epm.json');
 var idisContractAddress = contractData["deployStorageK"];
-
-var idisAbi = JSON.parse(fs.readFileSync(untildify("~/.eris/apps/idi/abi/"
-  + idisContractAddress)));
+var idisAbi = JSON.parse(fs.readFileSync("./abi/" + idisContractAddress));
 
 // properly instantiate the contract objects manager using the erisdb URL
 // and the account data (which is a temporary hack)
-var accountData = require('../account.json');
-var contractsManager = erisC.newContractManagerDev(erisdbURL, accountData);
+var accountData = require('./accounts.json');
+var contractsManager = erisC.newContractManagerDev(erisdbURL, accountData.simplechain_full_000);
 
 // properly instantiate the contract objects using the abi and address
 var idisContract = contractsManager.newContractFactory(idisAbi).at(idisContractAddress);
@@ -36,7 +34,7 @@ var idisContract = contractsManager.newContractFactory(idisAbi).at(idisContractA
 function getValue(callback) {
   idisContract.get(function(error, result){
     if (error) { throw error }
-    console.log("Idi's number is:\t\t\t" + result['c'][0]);
+    console.log("Idi's number is:\t\t\t" + result.toNumber());
     callback();
   });
 }
