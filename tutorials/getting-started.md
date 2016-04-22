@@ -11,7 +11,7 @@ There are three steps need to get moving with Eris:
 
 1. **Install** the Eris platform.
 2. **Roll** your own Blockchain in seconds.
-3. **Build** (and run) your distributed application using smart contract templates and a simple, web-based user interface.
+3. **Build** and run your distributed application using smart contract templates and a simple, web-based user interface.
 
 # Step 1: Install the Eris Platform
 
@@ -22,31 +22,31 @@ Currently we consider the most workable setup to be (what our tests consider aut
 * HOST_OS = {{ site.data.coding["os"].authoritative }}
 * DOCKER = {{ site.data.coding["docker"].authoritative }}
 
-## [Install Docker](http://docs.docker.com/installation/).
+## [Install Docker](http://docs.docker.com/installation/)
 
-Installation requires that Docker be installed. Please see the [Docker](https://docs.docker.com/installation/) documentation for how to install.
+Installation requires that Docker be installed. Please see the [Docker](https://docs.docker.com/installation/) documentation for how to install it.
 
-At the current time, `eris` requires `docker` >= {{ site.data.coding["docker"].minimum }}. You can check your docker version with `docker version`. We do not test against older versions of docker. `eris` may or may not work against earlier versions of docker and we can make no guarantees of usability there.
+At the current time, `eris` requires `docker` >= {{ site.data.coding["docker"].minimum }}. You can check your Docker version with `docker version`. We do not test against older versions of Docker: `eris` may or may not work against earlier versions and we can make no guarantees of usability there.
 
-### Docker Installation for Linux
+### Docker Installation on Linux
 
 Follow the link above for the official way to install Docker on your Linux box.
 
-**Essential**! After you install docker, then you must make sure that the user you are using to develop with `eris` has access to the docker socket (which is accessible via the docker Linux usergroup). When you are logged in as the user you can do this:
+**Essential**! After you install Docker, you must make sure that the user you are using to develop with `eris` has access to the Docker socket (which is accessible via the `docker` Linux usergroup). When you are logged in as the user you can do this:
 
 ```bash
 sudo usermod -a -G docker $USER
 ```
 
-That command will add the current user to the docker group which will mean that docker will not need to be called from `sudo`.
+That command will add the current user to the `docker` group which will mean that Docker will not need to be called from `sudo`.
 
-After you run that command, then please log out of the current shell and open a new shell. After that `eris` will then be able to connect to docker.
+After you run that command, then please log out of the current shell and open a new shell. After that `eris` will then be able to connect to Docker.
 
 The above command *may* be skipped, but if you do, then you will need to run all `eris` commands either as the root user or using `sudo`.
 
 **Note** If you are using a Linux or a Mac OSX box, please **make sure** you are installing Docker for the 64 bit architecture.
 
-### Docker Installation for OSX & Windows
+### Docker Installation on OSX & Windows
 
 If you are on OSX or Windows, the [Docker Toolbox](https://www.docker.com/toolbox) is a graphical way of installing Docker, Virtualbox and Docker Machine. The Toolbox will build all of the functionality which Docker requires so that `eris` is able to connect into the Docker daemon.
 
