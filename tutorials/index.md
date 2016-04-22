@@ -19,7 +19,7 @@ Then see our [quick start guide](getting-started/) to get you more like this mar
 
 [Get the tools installed](getting-started/)
 
-[Build tools from source](install-souce/)
+[Build tools from source](install-source/)
 
 [Troubleshoot your install](install-troubleshooting/)
 
@@ -27,7 +27,7 @@ Then see our [quick start guide](getting-started/) to get you more like this mar
 
 [Roll Your Own Chain](chain-making/)
 
-## Step 3 -- Build (and run) your distributed application
+## Step 3 -- Build and run your distributed application
 
 [Deploy Your Contracts](contracts-deploying/)
 
