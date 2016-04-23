@@ -1,0 +1,16 @@
+{
+  "name": "idis_app",
+  "version": "0.0.1",
+  "dependencies": {
+    "eris-contracts": "^0.13.1",
+    "prompt": "*",
+    "untildify": "^2.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "pretest": "cd ../contracts-deploying; ./commands.sh",
+    "test": "cp -r . ~/.eris/apps/idi/; cp ~/.eris/chains/simplechain/accounts.json ~/.eris/apps/idi/; cd ~/.eris/apps/idi/; mocha"
+  }
+}

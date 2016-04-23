@@ -39,6 +39,7 @@ epm
   -g, --gas="1111111111": default gas to use; can be overridden for any single job; default respects $EPM_GAS
   -h, --help[=false]: help for epm
   -o, --output="csv": output format which epm should use [csv,json]; default respects $EPM_OUTPUT_FORMAT
+  -w, --overwrite[=false]: overwrite jobs of similar names; defaults respects $EPM_OVERWRITE_APPROVE
   -e, --set=: default sets to use; operates the same way as the [set] jobs, only before the epm file is ran (and after default address; default respects $EPM_SETS
   -s, --sign="localhost:4767": <ip:port> of signer daemon which EPM should use; default respects $EPM_SIGNER_ADDR
   -t, --summary[=true]: output a table summarizing epm jobs; default respects $EPM_SUMMARY_TABLE
