@@ -35,12 +35,6 @@ We use an abstraction to simplify the chain making process called [Account Types
 
 Account types are simply bundles of permissions no more no less. Using the eris tooling you can also create your own account types with your own bundles of permissions which will be helpful.
 
-Eris ships with a chain manager tool we typically run from a docker container. This tool helps to simplify the chain making process. To learn a bit more about this tool type:
-
-```
-eris chains make -h
-```
-
 ## A Note Regarding This Tutorial
 
 The `eris` toolchain is designed to be very unix like, and as such we are able to craft most of what is needed in simple bash scripts which any competant developer should be able to understand. Bash really, truly, is the common denominator as it does not require any specialized language specific knowledge beyond a bare minimum to understand what is happening.

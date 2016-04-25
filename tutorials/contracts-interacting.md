@@ -239,8 +239,6 @@ eris chains start $chainname
 
 Where `$chainname` in the above sequence is the name of the chain you are using. What those commands will do is to first stop and remove the service container for the chain (this will leave its data container) and then it will restart the chain's service container but when it does so, eris will make sure the api port for your chain is running.
 
-**N.B.** In eris 0.11 the official release we automatically turn on the API of an eris:db style chain. If you are using one of the release candiates (0.11.0-rc1 or 0.11.0-rc2) for 0.11 you will need to change the above start command to `eris chains start -a $chainname` rather than simply `eris chains start $chainname`.
-
 **End Troubleshooting**
 
 The first time you run the script it should tell you that the value is `5` or whatever value you entered into the `setStorageBase` job of the epm.yaml from the [previous tutorial](/tutorials/contracts-deploying). Then it will prompt you to change the value. The second time you run the script it should tell you that the value is whatever you entered the first time and so on.
