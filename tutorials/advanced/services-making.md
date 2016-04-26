@@ -11,7 +11,7 @@ This tutorial is an expanded and revised version of the now deprecated (Part 1 o
 - Part 2: The Toadserver in Action: Deploy Testnet & eris init
 - Part 3: Deploying Smart Contracts & Managing Permissions
 
-**Protip:** If bash scripting is your thing, check out [this test file](https://github.com/eris-ltd/toadserver/blob/master/test.sh).
+**Protip:** If bash scripting is your thing, check out [this bash file](https://github.com/eris-ltd/toadserver/blob/master/run.sh).
 
 We're going to set up a chain that will then have a service depend upon it. The pipeline follows, roughly, three steps: 1) get your keys sorted, 2) start a chain, 3) start the service that links to chain.
 
