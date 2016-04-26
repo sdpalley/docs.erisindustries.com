@@ -538,7 +538,7 @@ Obviously with your own language and your own hash.
 
 # :tada:
 
-Congratulations, you've just made your very own smart contract backed service running alongside and interacting with a permissioned blockchain! That is the end of our tutorial series for the first level of understanding of the eris platform. Please see some of our more advanced tutorials if you still are curious about the eris platform. But you should have all the base buildign blocks to building your own next-generation data and process management solutions!
+Congratulations, you've just made your very own smart contract backed service running alongside and interacting with a permissioned blockchain! That is the end of our tutorial series for the first level of understanding of the eris platform. Please see some of our more advanced tutorials if you still are curious about the eris platform. But you should have all the base building blocks to building your own next-generation data and process management solutions!
 
 # Where to next?
 
