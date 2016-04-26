@@ -50,7 +50,7 @@ mkdir advtut
 cd advtut
 ```
 
-Now you'll make a file in this directory. Let's assume that is called `GSFactory.sol` and has the following contents
+Now you'll make a file in this directory. **Protip:** Get it with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/advtut/GSFactory.sol -o GSFactory.sol`. Let's assume that is called `GSFactory.sol` and has the following contents
 
 ```javascript
 contract GSContract {
@@ -84,7 +84,7 @@ What do these contracts do? Well, they aren't terribly interesting we know. The 
 
 # Fixup your epm.yaml
 
-Next we need to make an epm.yaml and make it look something like this:
+Next we need to make an epm.yaml. **Protip:** Get it with: `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/advtut/epm.yaml -o epm.yaml`. It should look like this:
 
 ```yaml
 jobs:
