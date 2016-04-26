@@ -9,7 +9,7 @@ title: "Tutorials | Interacting with Contracts Using eris-contracts"
 
 This tutorial is a continuation of our [contracts deploying tutorial](/tutorials/contracts-deploying). If you have not completed that tutorial, please do so before working with this tutorial. Once we have some contracts deployed to our chain, we will want to interact with them. Indeed, that is the entire point.
 
-So let us expand the very simple idiscontract out into a very simple smart contract backed appliction. To do this, we will be using node.js. To use this tutorial you will need a relatively recent version of [node](https://nodejs.org/en/download/package-manager/) installed on your box.
+So let us expand the very simple idiscontract out into a very simple smart contract backed application. To do this, we will be using node.js. To use this tutorial you will need a relatively recent version of [node](https://nodejs.org/en/download/package-manager/) installed on your box.
 
 # Introduction
 
