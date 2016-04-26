@@ -9,7 +9,7 @@ title: "Tutorials | Trouble Shooting Your Installation"
 
 Never fear, the marmots are here. See [Section 1 of our docker-machine tutorial](/tutorials/tool-specific/docker_machine/) and come back to your installation. All will be well.
 
-# No `eris` command found
+# No `eris` Command Found
 
 If you get a "eris: command not found" error then (if you built it from source) you need to make sure that your `$GOBIN` variable value is in your `$PATH` (see [Getting Started](/tutorials/getting-started/) and then do:
 
