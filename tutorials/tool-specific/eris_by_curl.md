@@ -14,7 +14,7 @@ deploying it onto the blockchain, and communicating with it.
 
 Installation instructions are included in the script.
 
-The script can be found independently [here](https://github.com/eris-ltd/mint-client/tree/develop/example)
+**Deprecation notice:** This tutorial is, for the most part, deprecated by way of stale versions. That said, the sequencing does display the logic under the hood of `eris-cli`.
 
 ```bash
 
