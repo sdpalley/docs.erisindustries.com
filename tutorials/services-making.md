@@ -52,7 +52,7 @@ eris services
 
 Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the app.js so it does a few things differently than the little cli version of idi we built before.
 
-Copy this as the new app.js.
+Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
 
 ```javascript
 'use strict';
