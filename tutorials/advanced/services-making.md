@@ -15,28 +15,16 @@ This tutorial is an expanded and revised version of the now deprecated (Part 1 o
 
 We're going to set up a chain that will then have a service depend upon it. The pipeline follows, roughly, three steps: 1) get your keys sorted, 2) start a chain, 3) start the service that links to chain.
 
-# Boot the keys server
-
-```bash
-$ eris services start keys
-```
-
-see it running with:
-
-```bash
-$ eris services ls --running
-```
-
 # Make a chain
 
 ```bash
-$ eris chains make --chain-type=simplechain bob
+eris chains make --chain-type=simplechain bob
 ```
 
 A few things happened here. First, a single key was generated inside the keys container. You can see it with:
 
 ```bash
-$ eris keys ls --container
+eris keys ls --container
 ```
 
 which should output:
@@ -48,25 +36,25 @@ The keys in your container kind marmot:  33451171C0E158592FE44AFE19E0244A8661E3B
 At this point, it is highly recommended (but not necessary) to export your key to host for backup:
 
 ```
-$ eris keys export 33451171C0E158592FE44AFE19E0244A8661E3B8
+eris keys export 33451171C0E158592FE44AFE19E0244A8661E3B8
 ```
 
 See it with:
 
 ```bash
-$ eris keys ls --host
+eris keys ls --host
 ```
 
-**Protip:** You can also `$ eris keys import ADDR` to go from host to container. Similiarly to `$ eris data import/export` these commands are thought of from the point of view of the container. See [this tutorial](../tool-specific/keyexporting/) for more information on the `eris keys` command.
+**Protip:** You can also `eris keys import ADDR` to go from host to container. Similiarly to `eris data import/export` these commands are thought of from the point of view of the container. See [this tutorial](/tutorials/tool-specific/keyexporting/) for more information on the `eris keys` command.
 
-Second, within the container, the key was both: 1) converted to the tendermint format: `priv_validator.json` and 2) used to create the `genesis.json` file. Both these files were then exported from the container to the host into `$HOME/.eris/chains/bob`, where `bob` is the name of the chain created with `chains make` above. 
+Second, within the container, the key was both: 1) converted to the tendermint format: `priv_validator.json` and 2) used to create the `genesis.json` file. Both these files were then exported from the container to the host into `~/.eris/chains/bob`, where `bob` is the name of the chain created with `chains make` above. 
 
 ## Get the pub key
 
 This step simply returns the pub key given the addr (which itself is a hash of the pubkey). The pub key is needed for harcoding in the toadserver definition file a few steps below. You can also get it from the `genesis.json` or `priv_validator.json` though I find running a single command easier than opening a file. A few of these steps will soon be simplified.
 
 ```bash
-$ eris keys pub 33451171C0E158592FE44AFE19E0244A8661E3B8
+eris keys pub 33451171C0E158592FE44AFE19E0244A8661E3B8
 9F7381064F3DEA7355B09A8B47A201D310E2FD475CF686586CD246A23B603D89
 ```
 
@@ -75,7 +63,7 @@ $ eris keys pub 33451171C0E158592FE44AFE19E0244A8661E3B8
 The config file specifies some variables for the node on which the chain is to be run. Perhaps you want to change the moniker to something more relevant. It is merely a name for your node and need not equal `bob`.
 
 ```bash
-$ cp $HOME/.eris/chains/default/config.toml $HOME/.eris/chains/bob/
+cp ~/.eris/chains/default/config.toml ~/.eris/chains/bob/
 ```
 
 Now we have everything set up; you should have each a `config.toml`, `priv_validator.json`, and `genesis.json` in the `bob` directory. The address and pubkey in the latter two files should match. Yes? Ok, let's roll.
@@ -83,20 +71,20 @@ Now we have everything set up; you should have each a `config.toml`, `priv_valid
 # Start your chain
 
 ```bash
-$ eris chains new bob --dir $HOME/.eris/chains/bob
+eris chains new bob --dir ~/.eris/chains/bob
 ```
 
 This creates and starts a new chain while copying the contents of the `bob` directory into the chain data container.
 Maybe you want to chattier output to see what's going on under the hood? Add `--verbose` to the above command. When reporting bugs, always include `--debug` level output. Now you can see the following: 1) running chain, 2) logs and, 3), genesis file with each command:
 
 ```bash
-$ eris chains ls --running
-$ eris chains logs bob
-$ eris chains plop bob genesis
+eris chains ls -a
+eris chains logs bob
+eris chains plop bob genesis
 ```
 
 All endpoints are available via `http://HostIP:46657`. You can see a sample [here](http://pinkpenguin.interblock.io:46657). Notice a few things for your chain:
- - `/genesis` should be nearly identical to `$home/.eris/chains/bob/genesis.json`;
+ - `/genesis` should be nearly identical to `~/.eris/chains/bob/genesis.json`;
  - `/list_validators` should show the same info as your key (pubkey/addr).
  - `/list_names` to see name registry entries. See below.
  - `/net_info` can be refreshed and block height should increase. This is also true of log output.
@@ -106,7 +94,7 @@ All endpoints are available via `http://HostIP:46657`. You can see a sample [her
 Your chain is now setup and ready to be used as a dependency for the toadserver. (Note: this process is still a WIP and will be smoother in future releases). Since we'll be launching the toadserver as a service, we need two things: 1) its docker image and 2) a service definition file (which specifies how to run the toadserver). The former is already built for you using this [Dockerfile](https://github.com/eris-ltd/toadserver/blob/master/Dockerfile) and is specified in the definition file at this line: `image = "quay.io/eris/toadserver:latest"`. The image will automatically be pulled from quay if not found locally when the toadserver is started (if you answer yes to the prompt). Alternatively, you can build it locally from the Dockerfile. See way below for more info on that.
 
 ## Edit some variables
-Open the file: `$ eris services edit toadserver`, and replace the following environment variables with the values from above.
+Open the file: `eris services edit toadserver`, and replace the following environment variables with the values from above.
 
 ```bash
 "MINTX_CHAINID=$CHAIN_NAME",
@@ -125,20 +113,20 @@ It should now look like this:
 The `--chain` flag will link the toadserver to the chain named `bob`, assuming it is running.
 
 ```bash
-$ eris services start toadserver --chain=bob
+eris services start toadserver --chain=bob
 ```
 
 See what's going on with each:
 
 ```bash
-$ eris services ls --running
-$ eris services logs toadserver
+eris services ls -a
+eris services logs toadserver
 ```
 
 Two things happened: If IPFS was not already running as a service, the toadserver started it. If it was already running, the toadserver would have simply linked to it (a la docker). With IPFS running, `eris files` is also available to you. Both the chain and keys containers were also linked to the toadserver. These are used under the hood by the next commands. Notice the toadserver has a port exposed at `11113`. Let's see what we can do with it. First, make or pick a file in your current working directory (e.g., `hungryToad.txt`) that you'd like to add. Then run:
 
 ```bash
-$ curl -X POST http://0.0.0.0:11113/postfile/hungryToad.txt --data-binary "@hungryToad.txt"
+curl -X POST http://0.0.0.0:11113/postfile/hungryToad.txt --data-binary "@hungryToad.txt"
 ```
 
 where `hungryToad.txt` is the name you want entered in the name registry (i.e, the name by which you'll retreive the file) and `"@hungryToad.txt"` is the file name in your current working directory.
@@ -149,17 +137,17 @@ You should now have a name registry on your chain. Head to your `http://HostIP:4
 {"jsonrpc":"2.0","id":"","result":[11,{"block_height":1224,"names":[{"name":"hungryToad.txt","owner":"33451171C0E158592FE44AFE19E0244A8661E3B8","data":"QmeBXhokamuGjUzvEf9vLhTT5Nzb9mboGRig8az7DFm9GC","expires":12908}]}],"error":""}
 ```
 
-Notice that the `"owner:"` is the same address from the output of `$ eris keys ls`. Now you have a download server whereby anyone can download files. The file is retreivable in a few different ways:
+Notice that the `"owner:"` is the same address from the output of `eris keys ls`. Now you have a download server whereby anyone can download files. The file is retreivable in a few different ways:
 
 To save it locally, run:
 ```bash
-$ curl -X GET http://HostIP:11113/getfile/hungryToad.txt -o hungryToad.txt
+curl -X GET http://HostIP:11113/getfile/hungryToad.txt -o hungryToad.txt
 ```
 or view it in the browser at the URL given above, or see it from IPFS at:
 
 `http://gateway.ipfs.io/ipfs/HASH` where HASH is the unquoted value from "data" in the previous json output.
 
-If your toadserver service flames out for whatever reason, you can `$ eris services restart toadserver` and be on your merry way. Happy hopping!
+If your toadserver service flames out for whatever reason, you can `eris services restart toadserver` and be on your merry way. Happy hopping!
 
 That's it. A simple app with two endpoints for adding and retrieving files that uses a chain to retrieve the file by name via IPFS hash. Next, I'll describe what is needed to actually build the service we've just started.
 
@@ -201,13 +189,13 @@ You can see all of eris' Dockerfiles [here](https://github.com/eris-ltd/common/t
 Now that we have a Dockerfile (in current working directory), it's time to build the image:
 
 ```
-$ docker build -t quay.io/eris/toadserver:demo .
+docker build -t quay.io/eris/toadserver:demo .
 ```
 
-The `-t` specifies a path/to/name:tag for your image while `.` at the end is the path to the Dockerfile. You'll see a bunch of output of your build then you can run `$ docker images` to see a list of images. If the build was successful, yours will be there. Once you've tested your dockerized-application-as-a-service (or would simply like to share it with others), you can
+The `-t` specifies a path/to/name:tag for your image while `.` at the end is the path to the Dockerfile. You'll see a bunch of output of your build then you can run `docker images` to see a list of images. If the build was successful, yours will be there. Once you've tested your dockerized-application-as-a-service (or would simply like to share it with others), you can
 
 ```bash
-$ docker push quay.io/eris/toadserver:demo
+docker push quay.io/eris/toadserver:demo
 ```
 
 (after logging in, of course. It's all pretty similar to git.)
@@ -217,14 +205,14 @@ $ docker push quay.io/eris/toadserver:demo
 Once one has an image, the usual way to launch a docker container running that image is with `docker run` from the command line. This command specifies a ton of parameters (or not!) for deploying various applications. Working with a definition file simplifies a lot of things. (If you find similarities to `[docker-compose](https://docs.docker.com/compose/)`, that's because the `eris` tool is inspired from it. We'll first make one then I'll walk through equivalent `docker run` command. Start with:
 
 ```basg
-$ eris services new toad quay.io/eris/toadserver:demo
+eris services new toad quay.io/eris/toadserver:demo
 ```
 
 This creates a new service named "toad" with image "quay.io/eris/toadserver:demo" and writes it to `~/.eris/services/toad.toml`. See it then open it with:
 
 ```bash
-$ eris services cat toad
-$ eris services edit toad
+eris services cat toad
+eris services edit toad
 ```
 
 You'll see something like:
@@ -287,10 +275,10 @@ include = [ "docker" ]
 requires = [ "" ]
 ```
 
-This has all the runtime requirements for the toadserver. Under the hood, `$ eris services start toadserver` will marshal these fields then, using [go-dockerclient](https://godoc.org/github.com/fsouza/go-dockerclient), execute the `docker run` sequence. See [here](https://docs.erisindustries.com/documentation/eris-cli/0.11.0/services_specification/) for the services specification. From the command line, this service definition file looks like:
+This has all the runtime requirements for the toadserver. Under the hood, `eris services start toadserver` will marshal these fields then, using [go-dockerclient](https://godoc.org/github.com/fsouza/go-dockerclient), execute the `docker run` sequence. See [here](https://docs.erisindustries.com/documentation/eris-cli/0.11.0/services_specification/) for the services specification. From the command line, this service definition file looks like:
 
 ```bash
-$ docker run --name toadserver \
+docker run --name toadserver \
 --publish 11113:11113 \
 --link eris_service_ipfs_1:ipfs \
 --link eris_service_keys_1:keys \
