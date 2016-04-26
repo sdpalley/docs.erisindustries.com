@@ -50,11 +50,10 @@ Over the course of working through these processes, we'll be introducing `eris a
 For the purposes of this tutorial let's first make a chain with three validators (we're going to run them on virtualbox locally for this tutorial) and one root node (which we're going to run "locally"; or if you are on OSX or Windows in the main `eris` machine).
 
 ```bash
-eris services start keys #if it is not turned on
 eris chains make maintainchain --account-types Validator:3,Root:1
 ```
 
-Let's create some machines and start the chain on on them. For this tutorial we will use the virtualbox driver for docker-machine but you can use any of the drivers which you prefer.
+Let's create some machines and start the chain on them. For this tutorial we will use the virtualbox driver for docker-machine but you can use any of the drivers which you prefer.
 
 ```bash
 machine_base="my-valpool"
@@ -86,6 +85,8 @@ do
   eris chains new --dir $chain_name/"$chain_name"_validator_00"$i" --machine "$machine_base-$i" --logrotate $chain_name
 done
 ```
+
+**Protip:** Get this bash file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/tutorials/adv-chain-maintaining-bash.sh -o bash.sh`.
 
 **N.B.** even though the Docker images *are* available either on your host (if you're on Linux) or within the `eris` machine (if you're on OSX or Windows), they will not be available on the newly created machines. The above sequence will kick off redundant downloading of the images. **Please do not run** this tutorial if you are on a slow connection as it will take **a very long time** just to pull all the appropriate images. If your connection is reasonably fast, it should not take too long.
 
