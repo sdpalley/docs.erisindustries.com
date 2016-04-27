@@ -9,7 +9,7 @@ It is not necessarily a simple matter to "make" a permissioned chain. With the `
 
 This tutorial is structured to walk individuals through parts of the eris developer tool kit while also showing readers how to make a simple permissioned blockchain.
 
-**Note** -- This tutorial is built for Eris versions `>= 0.11.3`. For other versions of this tutorial please see below:
+**Note** -- This tutorial is built for Eris versions `>= 0.11.4`. For other versions of this tutorial please see below:
 
 * [v0.11.0](/tutorials/deprecated/chainmaking-v0.11.0/)
 
