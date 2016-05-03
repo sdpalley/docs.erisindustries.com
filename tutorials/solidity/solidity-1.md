@@ -11,7 +11,7 @@ This is an introduction to systems of smart contracts. The purpose of these docu
 
 On top of this, we would also recommend checking out the [Ethereum wiki](https://github.com/ethereum/wiki/wiki). It has links to the above mentioned docs, and a lot of other information as well, such as the contract ABI and the natspec (for documentation). To discuss Eris-specific implementations, the Eris Industries team can be reached on [#erisindustries](irc://freenode.net/#erisindustries) on Freenode or [our own support forum](https://support.erisindustries.com)
 
-About trust: The systems we study here are designed to be modular, i.e. parts of the code can be replaced during runtime, which in turn makes them inherently trust-ful. Someone must be allowed to make these updates. It is important to know this. If you want to learn how to write small trust-less, automated systems this is not really the place (although many of the principles are the same in both types of systems).
+About trust: The systems we study here are designed to be modular, i.e. parts of the code can be replaced during runtime, which in turn makes them inherently trust-ful. Someone must be allowed to make these updates. It is important to know this. If you want to learn how to write small trust-less, automated systems these lessons will still likely be useful, but it is good to keep in mind that this is not what they are oriented to.
 
 ## Dependencies
 
@@ -31,18 +31,18 @@ This document is about systems of smart contracts, but we will start by looking 
 contract Users {
     // Here we store the names. Make it public to automatically generate an
     // accessor function named 'users' that takes a fixed-length string as argument.
-    mapping (bytes32 => address) public users;
+    mapping (string => address) public users;
 
     // Register the provided name with the caller address.
     // Also, we don't want them to register "" as their name.
-    function register(bytes32 name) {
+    function register(string name) {
         if(users[name] == 0 && name != ""){
             users[name] = msg.sender;
         }
     }
 
     // Unregister the provided name with the caller address.
-    function unregister(bytes32 name) {
+    function unregister(string name) {
         if(users[name] != 0 && name != ""){
             users[name] = 0x0;
         }
@@ -61,7 +61,7 @@ contract HelloSystem {
 
 ## Deploying and removing contracts
 
-The `HelloSystem` contract can be deployed as-is without any problems, but once it's been deployed it will remain on the chain for good. We need a way to remove it. In Solidity, the command for removing (or suiciding) a contract is this: `suicide(addr)`. The argument here is the address to which any remaining funds should be sent. In order to expose this functionality, we need to put it inside a (implicitly public) function. This is what a suicide function could look like in `HelloSystem`:
+The `HelloSystem` contract can be deployed as-is without any problems, but once it's been deployed it will remain on the chain for good. We need a way to remove it. In Solidity, the command for removing (or suiciding) a contract is this: `suicide(addr)`. Alternatively, a user could use the keyword `selfdestruct`. The argument here is the address to which any remaining funds should be sent. In order to expose this functionality, we need to put it inside a (implicitly public) function. This is what a suicide function could look like in `HelloSystem`:
 
 ```javascript
 contract HelloSystem {
@@ -590,16 +590,16 @@ contract Doug {
     address owner;
 
     // This is where we keep all the contracts.
-    mapping (bytes32 => address) contracts;
+    mapping (string => address) contracts;
 
-    function addContract(bytes32 name, address addr) {
+    function addContract(string name, address addr) {
         if(msg.sender != owner){
             return;
         }
         contracts[name] = addr;
     }
 
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(string name) returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
         }
@@ -610,7 +610,7 @@ contract Doug {
         return true;
     }
 
-    function getContract(bytes32 name) constant returns (address addr) {
+    function getContract(string name) constant returns (address addr) {
         return contracts[name];
     }
 
@@ -650,7 +650,7 @@ contract DougEnabled {
 This logic will be utilized by Doug when `addContract` is called, to set it. If the contract already has a Doug address, it will return false on `setDougAddress`, and in that case it will not be added.
 
 ```javascript
-function addContract(bytes32 name, address addr) {
+function addContract(string name, address addr) {
     if(msg.sender != owner){
         return;
     }
@@ -713,7 +713,7 @@ contract Doug {
     address owner;
 
     // This is where we keep all the contracts.
-    mapping (bytes32 => address) public contracts;
+    mapping (string => address) public contracts;
 
     // Constructor
     function Doug(){
@@ -721,7 +721,7 @@ contract Doug {
     }
 
     // Add a new contract to Doug. This will overwrite an existing contract.
-    function addContract(bytes32 name, address addr) returns (bool result) {
+    function addContract(string name, address addr) returns (bool result) {
         if(msg.sender != owner){
             return;
         }
@@ -735,7 +735,7 @@ contract Doug {
     }
 
     // Remove a contract from Doug. We could also suicide if we want to.
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(string name) returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
         }
@@ -773,7 +773,7 @@ contract Doug {
 
 // Interface for getting contracts from Doug
 contract ContractProvider {
-    function contracts(bytes32 name) returns (address addr) {}
+    function contracts(string name) returns (address addr) {}
 }
 
 // Base class for contracts that only allow the fundmanager to call them.
