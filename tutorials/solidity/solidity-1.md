@@ -310,7 +310,7 @@ contract FundManager {
     }
 
     // NEW
-    // ********************************************************************************
+    // *************************************************************************
 
     // Add a new bank address to the contract.
     function setBank(address newBank) constant returns (bool res) {
@@ -321,7 +321,7 @@ contract FundManager {
         return true;
     }
 
-    // ********************************************************************************
+    // *************************************************************************
 
     // Attempt to withdraw the given 'amount' of Ether from the account.
     function deposit() returns (bool res) {
@@ -434,9 +434,9 @@ contract FundManager {
         owner = msg.sender;
         bank = new Bank();
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         Bank(bank).setOwner(address(this));
-        // ********************************************************************************
+        // *********************************************************************
     }
 
     // Add a new bank address to the contract.
@@ -445,19 +445,19 @@ contract FundManager {
             return false;
         }
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         bool result = Bank(newBank).setOwner(address(this));
         // If we couldn't set ourself as owner, we will not add the bank.
         if(!result){
             return false;
         }
-        // ********************************************************************************
+        // *********************************************************************
         bank = newBank;
         return true;
     }
 
     // NEW
-    // ********************************************************************************
+    // *************************************************************************
 
     // We're responsible for this now that we're the owner of the banks.
     function suicideBank(address addr) {
@@ -476,7 +476,7 @@ contract FundManager {
         return true;
     }
 
-    // ********************************************************************************
+    // *************************************************************************
 
     // Attempt to withdraw the given 'amount' of Ether from the account.
     function deposit() returns (bool res) {
@@ -489,11 +489,11 @@ contract FundManager {
             return false;
         }
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         if(perms[msg.sender] != 1){
             return false;
         }
-        // ********************************************************************************
+        // *********************************************************************
 
         // Use the interface to call on the bank contract. We pass msg.value along as well.
         bool success = Bank(bank).deposit.value(msg.value)(msg.sender);
@@ -512,11 +512,11 @@ contract FundManager {
         }
 
         // NEW
-        // ********************************************************************************
+        // ***********************************************************************
         if(perms[msg.sender] != 1){
             return false;
         }
-        // ********************************************************************************
+        // ***********************************************************************
 
         // Use the interface to call on the bank contract.
         bool success = Bank(bank).withdraw(msg.sender, amount);
