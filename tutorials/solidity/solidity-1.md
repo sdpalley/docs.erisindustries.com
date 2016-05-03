@@ -591,20 +591,19 @@ contract Doug {
 
     // This is where we keep all the contracts.
     mapping (bytes32 => address) contracts;
+    
+    modifier onlyOwner { //a modifier to reduce code replication
+        if (msg.sender == owner) // this ensures that only the owner can access the function
+            _
+    }
 
-    function addContract(bytes32 name, address addr) {
-        if(msg.sender != owner){
-            return;
-        }
+    function addContract(bytes32 name, address addr) onlyOwner {
         contracts[name] = addr;
     }
 
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(bytes32 name) onlyOwner returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
-        }
-        if(msg.sender != owner){
-            return;
         }
         contracts[name] = 0x0;
         return true;
@@ -614,16 +613,14 @@ contract Doug {
         return contracts[name];
     }
 
-    function remove() {
-        if (msg.sender == owner){
-            suicide(owner);
-        }
+    function remove() onlyOwner {
+        suicide(owner);
     }
 
 }
 ```
 
-Note that Doug is actually a misnomer. Doug is not one smart contract but many, with numerous components. One of the components is name registration, though, so I tend to call these type of top-level namereg CMCs Doug.
+There are two things to note here. One is that we have begun to use the `modifier` keyword. This reduces our code replication and can be tacked onto our functions like you see with `onlyOwner` above. This is useful in keeping your CMCs clean and well maintained. The other thing to note is that Doug is actually a misnomer. Doug is not one smart contract but many, with numerous components. One of the components is name registration, though, so I tend to call these type of top-level namereg CMCs Doug.
 
 We will use this contract to store the following contracts: "fundmanager", "bank", "bankdb", "perms", "permsdb". We're also going to add links to Doug in all of them and then use it as glue. They'll call doug to get the address to contracts they need, cast them, and then call the functions. This is how it will work more specifically:
 
@@ -715,16 +712,17 @@ contract Doug {
     // This is where we keep all the contracts.
     mapping (bytes32 => address) public contracts;
 
+    modifier onlyOwner { //a modifier to reduce code replication
+        if (msg.sender == owner) // this ensures that only the owner can access the function
+            _
+    }
     // Constructor
     function Doug(){
         owner = msg.sender;
     }
 
     // Add a new contract to Doug. This will overwrite an existing contract.
-    function addContract(bytes32 name, address addr) returns (bool result) {
-        if(msg.sender != owner){
-            return;
-        }
+    function addContract(bytes32 name, address addr) onlyOwner returns (bool result) {
         DougEnabled de = DougEnabled(addr);
         // Don't add the contract if this does not work.
         if(!de.setDougAddress(address(this))) {
@@ -735,38 +733,31 @@ contract Doug {
     }
 
     // Remove a contract from Doug. We could also suicide if we want to.
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(bytes32 name) onlyOwner returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
-        }
-        if(msg.sender != owner){
-            return;
         }
         contracts[name] = 0x0;
         return true;
     }
 
-    function remove(){
+    function remove() onlyOwner {
+        address fm = contracts["fundmanager"];
+        address perms = contracts["perms"];
+        address permsdb = contracts["permsdb"];
+        address bank = contracts["bank"];
+        address bankdb = contracts["bankdb"];
 
-        if(msg.sender == owner){
+        // Remove everything.
+        if(fm != 0x0){ DougEnabled(fm).remove(); }
+        if(perms != 0x0){ DougEnabled(perms).remove(); }
+        if(permsdb != 0x0){ DougEnabled(permsdb).remove(); }
+        if(bank != 0x0){ DougEnabled(bank).remove(); }
+        if(bankdb != 0x0){ DougEnabled(bankdb).remove(); }
 
-            address fm = contracts["fundmanager"];
-            address perms = contracts["perms"];
-            address permsdb = contracts["permsdb"];
-            address bank = contracts["bank"];
-            address bankdb = contracts["bankdb"];
-
-            // Remove everything.
-            if(fm != 0x0){ DougEnabled(fm).remove(); }
-            if(perms != 0x0){ DougEnabled(perms).remove(); }
-            if(permsdb != 0x0){ DougEnabled(permsdb).remove(); }
-            if(bank != 0x0){ DougEnabled(bank).remove(); }
-            if(bankdb != 0x0){ DougEnabled(bankdb).remove(); }
-
-            // Finally, remove doug. Doug will now have all the funds of the other contracts,
-            // and when suiciding it will all go to the owner.
-            suicide(owner);
-        }
+        // Finally, remove doug. Doug will now have all the funds of the other contracts,
+        // and when suiciding it will all go to the owner.
+        suicide(owner);
     }
 
 }
