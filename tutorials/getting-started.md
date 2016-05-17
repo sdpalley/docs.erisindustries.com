@@ -67,6 +67,11 @@ brew update
 brew install eris
 ```
 
+If you intend to run Eris containers on your local machine:
+```
+brew install virtualbox
+```
+
 ### Windows Only
 
 **N.B.** No matter whether you follow the below or not, you'll want to run `eris` commands either from `git bash` or from the `Docker Quickstart Terminal` (which is really just `git bash`) window.
