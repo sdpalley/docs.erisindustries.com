@@ -60,11 +60,11 @@ If VirtualBox gives you trouble, then use [docker machine's plugins](https://git
 
 ### OSX Only
 
-If you're a brew and brew cask user then:
+If you're a Homebrew user then:
 
 ```bash
-brew cask install virtualbox
-brew install docker docker-machine
+brew update
+brew install eris
 ```
 
 ### Windows Only
