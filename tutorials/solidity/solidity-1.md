@@ -7,9 +7,9 @@ title: "Tutorials | Solidity 1: The Five Types Model"
 
 # Introduction
 
-This is an introduction to systems of smart contracts. The purpose of these documents is to teach methods of writing large, scalable smart contract back-ends for distributed applications. The reader should be familiar with the basics of smart contract writing, and they should know what accounts, contracts and transactions are, and how to work with them. A good introduction to smart contract development (and a must-read) can be found [here](https://github.com/ethereum/wiki/wiki/Ethereum-Development-Tutorial). The example code in this document is written in the new Solidity language. The official tutorial can be found [here](https://github.com/ethereum/wiki/wiki/Solidity-Tutorial).
+This is an introduction to systems of smart contracts. The purpose of these documents is to teach methods of writing large, scalable smart contract back-ends for distributed applications. The reader should be familiar with the basics of smart contract writing, and they should know what accounts, contracts and transactions are, and how to work with them. A good introduction to smart contract development (and a must-read) from the official Solidity site (the language this tutorial is written in) can be found [here](http://solidity.readthedocs.io/en/latest/introduction-to-smart-contracts.html).
 
-On top of this, we would also recommend checking out the [Ethereum wiki](https://github.com/ethereum/wiki/wiki). It has links to the above mentioned docs, and a lot of other information as well, such as the contract ABI and the natspec (for documentation). To discuss Eris-specific implementations, the Eris Industries team can be reached on [#erisindustries](irc://freenode.net/#erisindustries) on Freenode or [our own support forum](https://support.erisindustries.com)
+On top of this, we would also recommend checking out the [Ethereum wiki](https://github.com/ethereum/wiki/wiki). It has links to the above mentioned docs, and a lot of other information as well, such as the [contract ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) and the [natspec (for documentation)](https://github.com/ethereum/wiki/wiki/Ethereum-Natural-Specification-Format). To discuss Eris-specific implementations, the Eris Industries team can be reached on [#erisindustries](irc://freenode.net/#erisindustries) on Freenode or [our own support forum](https://support.erisindustries.com)
 
 About trust: The systems we study here are designed to be modular, i.e. parts of the code can be replaced during runtime, which in turn makes them inherently trust-ful. Someone must be allowed to make these updates. It is important to know this. If you want to learn how to write small trust-less, automated systems this is not really the place (although many of the principles are the same in both types of systems).
 
@@ -310,7 +310,7 @@ contract FundManager {
     }
 
     // NEW
-    // ********************************************************************************
+    // *************************************************************************
 
     // Add a new bank address to the contract.
     function setBank(address newBank) constant returns (bool res) {
@@ -321,7 +321,7 @@ contract FundManager {
         return true;
     }
 
-    // ********************************************************************************
+    // *************************************************************************
 
     // Attempt to withdraw the given 'amount' of Ether from the account.
     function deposit() returns (bool res) {
@@ -434,9 +434,9 @@ contract FundManager {
         owner = msg.sender;
         bank = new Bank();
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         Bank(bank).setOwner(address(this));
-        // ********************************************************************************
+        // *********************************************************************
     }
 
     // Add a new bank address to the contract.
@@ -445,19 +445,19 @@ contract FundManager {
             return false;
         }
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         bool result = Bank(newBank).setOwner(address(this));
         // If we couldn't set ourself as owner, we will not add the bank.
         if(!result){
             return false;
         }
-        // ********************************************************************************
+        // *********************************************************************
         bank = newBank;
         return true;
     }
 
     // NEW
-    // ********************************************************************************
+    // *************************************************************************
 
     // We're responsible for this now that we're the owner of the banks.
     function suicideBank(address addr) {
@@ -476,7 +476,7 @@ contract FundManager {
         return true;
     }
 
-    // ********************************************************************************
+    // *************************************************************************
 
     // Attempt to withdraw the given 'amount' of Ether from the account.
     function deposit() returns (bool res) {
@@ -489,11 +489,11 @@ contract FundManager {
             return false;
         }
         // NEW
-        // ********************************************************************************
+        // *********************************************************************
         if(perms[msg.sender] != 1){
             return false;
         }
-        // ********************************************************************************
+        // *********************************************************************
 
         // Use the interface to call on the bank contract. We pass msg.value along as well.
         bool success = Bank(bank).deposit.value(msg.value)(msg.sender);
@@ -512,11 +512,11 @@ contract FundManager {
         }
 
         // NEW
-        // ********************************************************************************
+        // ***********************************************************************
         if(perms[msg.sender] != 1){
             return false;
         }
-        // ********************************************************************************
+        // ***********************************************************************
 
         // Use the interface to call on the bank contract.
         bool success = Bank(bank).withdraw(msg.sender, amount);
@@ -591,20 +591,19 @@ contract Doug {
 
     // This is where we keep all the contracts.
     mapping (bytes32 => address) contracts;
+    
+    modifier onlyOwner { //a modifier to reduce code replication
+        if (msg.sender == owner) // this ensures that only the owner can access the function
+            _
+    }
 
-    function addContract(bytes32 name, address addr) {
-        if(msg.sender != owner){
-            return;
-        }
+    function addContract(bytes32 name, address addr) onlyOwner {
         contracts[name] = addr;
     }
 
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(bytes32 name) onlyOwner returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
-        }
-        if(msg.sender != owner){
-            return;
         }
         contracts[name] = 0x0;
         return true;
@@ -614,16 +613,14 @@ contract Doug {
         return contracts[name];
     }
 
-    function remove() {
-        if (msg.sender == owner){
-            suicide(owner);
-        }
+    function remove() onlyOwner {
+        suicide(owner);
     }
 
 }
 ```
 
-Note that Doug is actually a misnomer. Doug is not one smart contract but many, with numerous components. One of the components is name registration, though, so I tend to call these type of top-level namereg CMCs Doug.
+There are two things to note here. One is that we have begun to use the `modifier` keyword. This reduces our code replication and can be tacked onto our functions like you see with `onlyOwner` above. This is useful in keeping your CMCs clean and well maintained. The other thing to note is that Doug is actually a misnomer. Doug is not one smart contract but many, with numerous components. One of the components is name registration, though, so I tend to call these type of top-level namereg CMCs Doug.
 
 We will use this contract to store the following contracts: "fundmanager", "bank", "bankdb", "perms", "permsdb". We're also going to add links to Doug in all of them and then use it as glue. They'll call doug to get the address to contracts they need, cast them, and then call the functions. This is how it will work more specifically:
 
@@ -715,16 +712,17 @@ contract Doug {
     // This is where we keep all the contracts.
     mapping (bytes32 => address) public contracts;
 
+    modifier onlyOwner { //a modifier to reduce code replication
+        if (msg.sender == owner) // this ensures that only the owner can access the function
+            _
+    }
     // Constructor
     function Doug(){
         owner = msg.sender;
     }
 
     // Add a new contract to Doug. This will overwrite an existing contract.
-    function addContract(bytes32 name, address addr) returns (bool result) {
-        if(msg.sender != owner){
-            return;
-        }
+    function addContract(bytes32 name, address addr) onlyOwner returns (bool result) {
         DougEnabled de = DougEnabled(addr);
         // Don't add the contract if this does not work.
         if(!de.setDougAddress(address(this))) {
@@ -735,38 +733,31 @@ contract Doug {
     }
 
     // Remove a contract from Doug. We could also suicide if we want to.
-    function removeContract(bytes32 name) returns (bool result) {
+    function removeContract(bytes32 name) onlyOwner returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
-        }
-        if(msg.sender != owner){
-            return;
         }
         contracts[name] = 0x0;
         return true;
     }
 
-    function remove(){
+    function remove() onlyOwner {
+        address fm = contracts["fundmanager"];
+        address perms = contracts["perms"];
+        address permsdb = contracts["permsdb"];
+        address bank = contracts["bank"];
+        address bankdb = contracts["bankdb"];
 
-        if(msg.sender == owner){
+        // Remove everything.
+        if(fm != 0x0){ DougEnabled(fm).remove(); }
+        if(perms != 0x0){ DougEnabled(perms).remove(); }
+        if(permsdb != 0x0){ DougEnabled(permsdb).remove(); }
+        if(bank != 0x0){ DougEnabled(bank).remove(); }
+        if(bankdb != 0x0){ DougEnabled(bankdb).remove(); }
 
-            address fm = contracts["fundmanager"];
-            address perms = contracts["perms"];
-            address permsdb = contracts["permsdb"];
-            address bank = contracts["bank"];
-            address bankdb = contracts["bankdb"];
-
-            // Remove everything.
-            if(fm != 0x0){ DougEnabled(fm).remove(); }
-            if(perms != 0x0){ DougEnabled(perms).remove(); }
-            if(permsdb != 0x0){ DougEnabled(permsdb).remove(); }
-            if(bank != 0x0){ DougEnabled(bank).remove(); }
-            if(bankdb != 0x0){ DougEnabled(bankdb).remove(); }
-
-            // Finally, remove doug. Doug will now have all the funds of the other contracts,
-            // and when suiciding it will all go to the owner.
-            suicide(owner);
-        }
+        // Finally, remove doug. Doug will now have all the funds of the other contracts,
+        // and when suiciding it will all go to the owner.
+        suicide(owner);
     }
 
 }

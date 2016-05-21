@@ -9,7 +9,7 @@ It is not necessarily a simple matter to "make" a permissioned chain. With the `
 
 This tutorial is structured to walk individuals through parts of the eris developer tool kit while also showing readers how to make a simple permissioned blockchain.
 
-**Note** -- This tutorial is built for Eris versions `>= 0.11.1`. For other versions of this tutorial please see below:
+**Note** -- This tutorial is built for Eris versions `>= 0.11.4`. For other versions of this tutorial please see below:
 
 * [v0.11.0](/tutorials/deprecated/chainmaking-v0.11.0/)
 
@@ -34,12 +34,6 @@ If you would like to understand all of the permissions which an eris chains smar
 We use an abstraction to simplify the chain making process called [Account Types](/documentation/eris-cm/latest/account_types/). This abstraction is just that, an abstraction to help users quickly get up to speed. In order to reduce the complexity of dealing with different types of accounts typically built on a chain, we use the idea of "account types". Account types are not restrictive in the sense that they are not the "only" types of accounts you can make with eris chains.
 
 Account types are simply bundles of permissions no more no less. Using the eris tooling you can also create your own account types with your own bundles of permissions which will be helpful.
-
-Eris ships with a chain manager tool we typically run from a docker container. This tool helps to simplify the chain making process. To learn a bit more about this tool type:
-
-```
-eris chains make -h
-```
 
 ## A Note Regarding This Tutorial
 
@@ -66,6 +60,15 @@ By default, `eris` is a very "quiet" tool. To check that the keys service starte
 ```bash
 eris services ls
 ```
+
+You'll see something like:
+
+```bash
+SERVICE     ON     CONTAINER ID     DATA CONTAINER
+keys        *      f2e9930e4a       3644788be1
+```
+
+which indicates that the keys services is on (running). To see a more comprehensive output for your services, try `eris services ls -a`.
 
 To see what we can do with eris keys we will run:
 
@@ -101,7 +104,7 @@ Now. Let's export that key onto our host's drive so that we can back it up and k
 eris keys export 49CA2456F65B524BDEF50217AE539B8E10B37421
 ```
 
-Note, that in the above command we used the output from the `eris keys gen` command with the `eris keys export`. You will want to replace the argument in the `export` command with whatever the address for the public key you created is.
+Note, that in the above command we used the output from the `eris keys gen` command with the `eris keys export`. You will want to replace the argument in the `export` command with whatever the address for the public key you created is. Your key will in the directory at `~/.eris/keys/data/49CA2456F65B524BDEF50217AE539B8E10B37421/`
 
 To see the keys which eris-keys generated both *inside* the container type and available on your host machine type:
 
@@ -137,15 +140,7 @@ With all that said, we're ready to make a chain. First let us make a "fake" chai
 eris chains make -h
 ```
 
-That will give you an overview of the chains maker tool.
-
-Now, let's make sure our keys service is on:
-
-```bash
-eris services start keys
-```
-
-Now we are ready.
+That will give you an overview of the chains maker tool. Now we are ready.
 
 ```bash
 eris chains make toRemoveLater
@@ -195,45 +190,11 @@ chain_dir=$HOME/.eris/chains/simplechain
 chain_dir_this=$chain_dir/simplechain_full_000
 ```
 
-That will just create a few variables we'll be using in the future.
-
-Now let's check that our keys service is running.
-
-```bash
-eris services ls
-```
-
-If your keys service is running then you're a-OK. If it is not running then start it again now.
-
-```bash
-eris services start keys
-```
-
-Now, we're ready.
+That will just create a few variables we'll be using in the future. Now, we're ready.
 
 ```bash
 eris chains make --account-types=Root:2,Full:1 simplechain
 ```
-
-**Troubleshooting**
-
-If you get an error which looks like this:
-
-If you get a 500 error which looks like this:
-
-```irc
-API error (500): Could not get container for eris_service_keys_1
-```
-
-That means that you have not started your keys service. Please run
-
-```bash
-eris services start keys
-```
-
-And then rerun the `chains make` command.
-
-**End Troubleshooting**
 
 That's it! Let's double check the files to make sure we are squared away.
 
@@ -241,6 +202,8 @@ That's it! Let's double check the files to make sure we are squared away.
 ls $chain_dir
 ls $chain_dir_this
 ```
+
+You'll a `genesis.json` and `priv_validator.json` in `$chain_dir_this`.
 
 # Step 3. Instantiate the Blockchain
 
@@ -256,6 +219,15 @@ Check that the chain is running with:
 eris chains ls
 ```
 
+You'll see something like:
+
+```bash
+CHAIN        ON     CONTAINER ID     DATA CONTAINER
+simplechain  *      efeeb0dd63       d06301b3a5
+```
+
+As with the `eris services ls -a` command, you can also see more information about your chain with `eris chains ls -a`. Note: the same holds true with `eris ls` and `eris ls -a`.
+
 To see the logs of the chain:
 
 ```bash
@@ -270,7 +242,20 @@ eris chains stop simplechain
 
 Boom. You're all set with your custom built, permissioned, smart contract-ified, blockchain.
 
+You can remove all trace of the chain with:
+
+```
+eris chains rm simplechain --data --dir --file --force
+```
+
+and clean up your eris environment with:
+
+```
+eris clean
+```
+
 # Where to next?
 
 **Next, you'll want to [deploy some contracts](/tutorials/contracts-deploying/)!**
+
 

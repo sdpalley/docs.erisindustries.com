@@ -52,7 +52,7 @@ eris services
 
 Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the app.js so it does a few things differently than the little cli version of idi we built before.
 
-Copy this as the new app.js.
+Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
 
 ```javascript
 'use strict';
@@ -188,15 +188,15 @@ node app.js
 That should output something like this:
 
 ```irc
-Idi's number is:                        48
+Idi's number is:                        150
         listening at:                   undefined
-Idi's number is:                        47
+Idi's number is:                        149
         listening at:                   undefined
-Idi's number is:                        46
+Idi's number is:                        148
         listening at:                   undefined
-Idi's number is:                        45
+Idi's number is:                        147
         listening at:                   undefined
-Idi's number is:                        44
+Idi's number is:                        146
         listening at:                   undefined
 ```
 
@@ -538,7 +538,7 @@ Obviously with your own language and your own hash.
 
 # :tada:
 
-Congratulations, you've just made your very own smart contract backed service running alongside and interacting with a permissioned blockchain! That is the end of our tutorial series for the first level of understanding of the eris platform. Please see some of our more advanced tutorials if you still are curious about the eris platform. But you should have all the base buildign blocks to building your own next-generation data and process management solutions!
+Congratulations, you've just made your very own smart contract backed service running alongside and interacting with a permissioned blockchain! That is the end of our tutorial series for the first level of understanding of the eris platform. Please see some of our more advanced tutorials if you still are curious about the eris platform. But you should have all the base building blocks to building your own next-generation data and process management solutions!
 
 # Where to next?
 

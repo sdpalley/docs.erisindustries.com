@@ -37,13 +37,13 @@ Our [current design](https://erisindustries/components/erisdb/) is opinated and 
 
 Both the consensus engine and virtual machine are, again, modules that can be swapped in and out as need by. Currently, they are packaged together as [eris:db](/documentation/edb/). The docker image used to run eris:db also contains [mint-client](https://github.com/eris-ltd/mint-client), a low-level tool for talking to the Tendermint consensus engine. A low-level [eth-client](https://github.com/eris-ltd/eth-client) is also available if you'd rather be rolling an ethereum chain.
 
-To create genesis files and keys for development, we have the `[eris:chain_manager](/documentation/eris-cm/latest/eris-cm/)`. The chain maker portion of the `eris:chain_manager` supports a wide variety of chain types, permissioning schemes, and participant kinds.
+To create genesis files and keys for development, we have the [eris:chain_manager](/documentation/eris-cm/latest/eris-cm/). The chain maker portion of the `eris:chain_manager` supports a wide variety of chain types, permissioning schemes, and participant kinds.
 
 ## Deploy Your Contracts
 
 Deploy contracts: write solidity, compile, send to the chain.
 
-We provide hosted compilers which uses the `[eris:compilers](/documentation/eris-compilers/)`, and as you would expect, swapping in your own compiler is as easy as flag with `[eris:package_manager](/documentation/eris-pm/latest/epm)`. `eris:package_manager` is our contract deployment and system establishment tooling which simplifies many of the steps for compiling, deploying and working with chain based systems. The [eris:abi](https://github.com/eris-ltd/eris-abi) tooling is used for formatting compiled solidity code.
+We provide hosted compilers which uses the [eris:compilers](/documentation/eris-compilers/), and as you would expect, swapping in your own compiler is as easy as flag with [eris:package_manager](/documentation/eris-pm/latest/epm). `eris:package_manager` is our contract deployment and system establishment tooling which simplifies many of the steps for compiling, deploying and working with chain based systems. The [eris:abi](https://github.com/eris-ltd/eris-abi) tooling is used for formatting compiled solidity code.
 
 All of this functionality is abstracted away with the `eris pkgs do` command. See the [contracts deploying tutorial](/tutorials/contracts-deploying/) for more information.
 

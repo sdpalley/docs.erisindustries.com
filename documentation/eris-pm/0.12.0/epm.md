@@ -18,7 +18,7 @@ Made with <3 by Eris Industries.
 Complete documentation is available at https://docs.erisindustries.com
 
 Version:
-  latest
+  0.12.0
 
 ```bash
 epm
@@ -31,7 +31,7 @@ epm
   -r, --address="": default address to use; operates the same way as the [account] job, only before the epm file is ran; default respects $EPM_ADDRESS
   -u, --amount="9999": default amount to use; default respects $EPM_AMOUNT
   -c, --chain="localhost:46657": <ip:port> of chain which EPM should use; default respects $EPM_CHAIN_ADDR
-  -m, --compiler="https://compilers.eris.industries:10114": <ip:port> of compiler which EPM should use; default respects $EPM_COMPILER_ADDR
+  -m, --compiler="https://compilers.eris.industries:10120": <ip:port> of compiler which EPM should use; default respects $EPM_COMPILER_ADDR
   -p, --contracts-path="./contracts": path to the contracts EPM should use; default respects $EPM_CONTRACTS_PATH
   -d, --debug[=false]: debug level output; the most output available for epm; if it is too chatty use verbose flag; default respects $EPM_DEBUG
   -n, --fee="1234": default fee to use; default respects $EPM_FEE
@@ -49,7 +49,7 @@ epm
 
 ## Specifications
 
-* [Asserts Specification](https://docs.erisindustries.com/documentation/eris-pm/latest/asserts_specification/)
-* [Jobs Specification](https://docs.erisindustries.com/documentation/eris-pm/latest/jobs_specification/)
-* [Variable Specification](https://docs.erisindustries.com/documentation/eris-pm/latest/variable_specification/)
+* [Asserts Specification](https://docs.erisindustries.com/documentation/eris-pm/0.12.0/asserts_specification/)
+* [Jobs Specification](https://docs.erisindustries.com/documentation/eris-pm/0.12.0/jobs_specification/)
+* [Variable Specification](https://docs.erisindustries.com/documentation/eris-pm/0.12.0/variable_specification/)
 

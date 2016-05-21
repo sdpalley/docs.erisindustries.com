@@ -27,4 +27,4 @@ Then see our [quick start guide](../getting-started/) to get you more like this 
 
 [Part VI: Advanced Soilidity Features](solidity-6)
 
-[Part VII: Updating Solidity Contracts](updating-solidity-7)
+[Part VII: Updating Solidity Contracts](solidity-7)

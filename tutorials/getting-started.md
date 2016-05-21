@@ -60,16 +60,21 @@ If VirtualBox gives you trouble, then use [docker machine's plugins](https://git
 
 ### OSX Only
 
-If you're a brew and brew cask user then:
+If you're a Homebrew user then:
 
 ```bash
-brew cask install virtualbox
-brew install docker docker-machine
+brew update
+brew install eris
+```
+
+If you intend to run Eris containers on your local machine:
+```
+brew install virtualbox
 ```
 
 ### Windows Only
 
-**N.B.** No matter whether you follow the below or not, you'll want to run `eris` commands either from `git bash` or from the `Docker Quickstart Terminal` (which is really just `git bash`) window. 
+**N.B.** No matter whether you follow the below or not, you'll want to run `eris` commands either from `git bash` or from the `Docker Quickstart Terminal` (which is really just `git bash`) window.
 
 If you prefer to use the `cmd` as a terminal, you still can: every command should work as expected, though all the tutorials will assume that you are using the `Docker Quickstart Terminal` and are structured to support **only** that environment.
 
@@ -104,7 +109,7 @@ sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys DDA1D0AB
 sudo su -c "echo deb https://apt.eris.industries DIST main > /etc/apt/sources.list.d/eris.list"
 ```
 
-**Note** in the above command you have to replace `DIST` with the distribution codename for your version of Debian or Ubuntu (`vivid`, `trusty`, `jessie`, etc.). We intend to make this easier in coming releases. We do not use the major-minor distribution pattern (e.g., `ubuntu-trusty`) as Docker does, but rather we just use (`trusty`) as the DIST codename.
+**Note** in the above command you **must** to replace `DIST` with the distribution codename for your version of Debian or Ubuntu (`vivid`, `trusty`, `jessie`, etc.). We intend to make this easier in coming releases. We do not use the major-minor distribution pattern (e.g., `ubuntu-trusty`) as Docker does, but rather we just use (`trusty`) as the DIST codename.
 
 Once the apt repository is added to your sources then:
 
@@ -195,7 +200,7 @@ That's it! Your chain is rolled!
 Let's remove all of the eris "stuff" before we move on to the next portion of the tutorials:
 
 ```bash
-eris clean 
+eris clean
 ```
 
 Now you're ready to build and run your distributed application!

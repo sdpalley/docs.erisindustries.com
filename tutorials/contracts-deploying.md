@@ -54,7 +54,7 @@ contract IdisContractsFTW {
 }
 ```
 
-What does this contract do? Well, it isn't very interesting we know. It merely `gets` and `sets` a value which is an unsigned integer type.
+What does this contract do? Well, it isn't very interesting we know. It merely `gets` and `sets` a value which is an unsigned integer type. **Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/idi.sol -o idi.sol` rather than copy pasting.
 
 # Fixup your epm.yaml
 
@@ -94,6 +94,8 @@ jobs:
       relation: eq
       val: $setStorageBase
 ```
+
+**Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/epm.yaml -o epm.yaml`
 
 Now. What does this file mean? Well, this file is the manager file for how to deploy and test your smart contracts. eris:package_manager will read this file and perform a sequence of `jobs` with the various parameters supplied for the job type. It will perform these in the order they are built into the yaml file. So let's go through them one by one and explain what each of these jobs are doing. For more on using various jobs [please see the jobs specification](/documentation/eris-pm/latest/jobs_specification/).
 
@@ -136,11 +138,22 @@ Both the `key` and the `val` (which in other testing frameworks are the `given` 
 
 # Deploy (and Test) The Contract
 
+See the [chain making tutorial](/tutorials/chain-making) if you need to review the chain making process. This series of commands assumed you followed that tutorial and continued here after `eris chains stop simplechain`.
+
 First, let's get our chain turned back on.
 
 ```bash
 eris chains ls
 ```
+
+If it's on, you'll see:
+
+```
+CHAIN        ON     CONTAINER ID     DATA CONTAINER
+simplechain  *      efeeb0dd63       d06301b3a5
+```
+
+whereas if it has been stopped, the `ON` field will have `-` rather than `*`. The same logic applies to services.
 
 If simplechain is not running, then turn it on with:
 
@@ -148,11 +161,7 @@ If simplechain is not running, then turn it on with:
 eris chains start simplechain
 ```
 
-If, when you ran `chains ls`, simplechain is not among the Active Containers then restart it with:
-
-```bash
-eris chains new simplechain --dir $chain_dir_this
-```
+or create a new chain if simplechain no longer exists.
 
 Now, we are ready to deploy this world changing contract. Make sure you are in the `~/.eris/apps/idi` folder, or wherever you saved your epm.yaml. Note that this is a very common pattern in simple contract testing and development; namely to (1) deploy a contract; (2) send it some transactions (or `call`s); (3) query some results from the contract (or `query-contract`s); and (4) assert a result. As you get moving with contract development you will likely find yourself doing this a lot.
 
@@ -223,6 +232,8 @@ To "see" your genesis.json then do this:
 eris chains cat simplechain genesis
 ```
 
+You can also see your genesis.json at `http://localhost:46657/genesis`. Note: replace `localhost` with the output of `docker-machine ip eris` if on OSX or Windows. See our [docker-machine tutorial](/tutorials/tool-specific/docker_machine/) for more information.
+
 <hr />
 
 If the account you are trying to use has not been registered in the genesis.json (or, latterly, has not been given the appropriate [permissions](/documentation/eris-db-permissions/) via permission transactions) and been given the appropriate permissions, then it will not be able to perform the actions it needs to in order to deploy and test the contract. The easiest thing to do at this point is to [update your genesis.json](/tutorials/tool-specific/genesisupdating/).
@@ -239,40 +250,6 @@ eris pkgs do --chain simplechain --address ADDR
 ```
 
 Where `ADDR` in the above command is the address you want to use.
-
-<hr />
-
-If you get an error which looks like this:
-
-```irc
-ERROR =>
-Saving ABI                                    /home/eris/.eris/apps/idi/abi
-open /home/eris/.eris/apps/idi/abi: is a directory
-Container eris_interactive_eris_service_idi_tmp_deploy_1 exited with status 1
-```
-
-That is not a very helpful error, we realize. Usually, but not always means that there is a problem with your chain. To debug this follow this sequence:
-
-* Check that the account you are using to deply the contracts is in the genesis.json on your host (`cat ~/.eris/chains/simplechain/genesis.json`).
-* Check that the genesis.json in the chain's data container matches the one in your `chain_dir` (`eris chains cat simplechain genesis`).
-
-If these are not the same, then you will need to reset your chain:
-
-```bash
-eris chains stop -rxf simplechain
-eris chains new simplechain --dir simplechain
-```
-
-If those are the same, the next thing to check is that the priv_validators are fine.
-
-* Check the priv_validator.json (which is the key that the eris chain uses) on your host (`cat ~/.eris/chains/simplechain/priv_validator.json`).
-* Check the priv_validator.json in the chain's data container matches the one in your `chain_dir` (`eris data exec simplechain "cat /home/eris/.eris/chains/simplechain/priv_validator.json`).
-
-If they're different reset the chain (see above for instructions).
-
-* Finally, check that the key in the priv_validator.json is registered in the genesis.json (the same address should be the single validator and also the key in the priv_validator.json). If the priv_validator.json is not in the genesis.json then make sure it is added to the accounts and the validators sections. See the [chain making](/tutorials/chain-making/) tutorial for instructions.
-
-When that is done, reset the chain and you should be good to go.
 
 <hr />
 

@@ -192,24 +192,6 @@ cd ~/.eris/chains
 eris chains make advchain --chain-type advchain
 ```
 
-**Troubleshooting**
-
-If you get the following error:
-
-```irc
-API error (500): Could not get container for eris_service_keys_1
-```
-
-That means you should start your keys service with:
-
-```bash
-eris services start keys
-```
-
-Then rerun the `eris chains make` command
-
-**End Troubleshooting**
-
 If it paused for a second and then just returned you to your terminal that means it was successful. Let's check with:
 
 ```bash

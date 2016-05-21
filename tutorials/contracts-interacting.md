@@ -9,7 +9,7 @@ title: "Tutorials | Interacting with Contracts Using eris-contracts"
 
 This tutorial is a continuation of our [contracts deploying tutorial](/tutorials/contracts-deploying). If you have not completed that tutorial, please do so before working with this tutorial. Once we have some contracts deployed to our chain, we will want to interact with them. Indeed, that is the entire point.
 
-So let us expand the very simple idiscontract out into a very simple smart contract backed appliction. To do this, we will be using node.js. To use this tutorial you will need a relatively recent version of [node](https://nodejs.org/en/download/package-manager/) installed on your box.
+So let us expand the very simple idiscontract out into a very simple smart contract backed application. To do this, we will be using node.js. To use this tutorial you will need a relatively recent version of [node](https://nodejs.org/en/download/package-manager/) installed on your box.
 
 # Introduction
 
@@ -29,6 +29,8 @@ As with all node.js applications, we will start by making a package.json. This s
   }
 }
 ```
+
+**Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/package.json -o package.json` while in the same directory as the `epm.yaml`.
 
 Once you have saved your package.json then you will run (from the same directory) this command:
 
@@ -132,8 +134,9 @@ function setValue(value) {
 // run
 getValue(changeValue);
 ```
+**Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/app.js -o app.js` while in the same directory as the `epm.yaml`.
 
-**N.B.** -- for *not Linux users*, please see the comments on lines 6-9 about the `var erisdbURL = "http://localhost:1337/rpc";` line of the script (spoiler alert, only do that on Linux).
+**N.B.** -- for *not Linux users*, please see the comments on lines 6-9 about the `var erisdbURL = "http://localhost:1337/rpc";` line of the script (spoiler alert, only do that on Linux). See our [docker-machine tutorial](/tutorials/tool-specific/docker_machine/) for more information.
 
 The code should be self explanatory if you understand even a little bit of javascript. Once we properly instantiate all of the objects then there are three functions.
 
@@ -199,7 +202,7 @@ Where `$chainname` is the name of the chain you want to use and `$addr` is the a
 When you do the deploy command you may get an error which looks like this:
 
 ```irc
-Error creating data container API error (500): Invalid container name (eris_data_idis app_tmp_deploy_1), only [a-zA-Z0-9][a-zA-Z0-9_.-] are allowed.
+Error creating data container: Invalid container name (eris_data_idis app_tmp_deploy_1), only [a-zA-Z0-9][a-zA-Z0-9_.-] are allowed.
 ```
 
 This is an "error" from Docker. What it means is that you have a space in the `"name"` field of your package.json which is used by eris to setup the container. We will control for this error in the future, but for now just replace the space in the name field with an underscore `_`.
@@ -238,8 +241,6 @@ eris chains start $chainname
 ```
 
 Where `$chainname` in the above sequence is the name of the chain you are using. What those commands will do is to first stop and remove the service container for the chain (this will leave its data container) and then it will restart the chain's service container but when it does so, eris will make sure the api port for your chain is running.
-
-**N.B.** In eris 0.11 the official release we automatically turn on the API of an eris:db style chain. If you are using one of the release candiates (0.11.0-rc1 or 0.11.0-rc2) for 0.11 you will need to change the above start command to `eris chains start -a $chainname` rather than simply `eris chains start $chainname`.
 
 **End Troubleshooting**
 
