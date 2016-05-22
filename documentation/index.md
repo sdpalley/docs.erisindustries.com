@@ -25,7 +25,7 @@ title: "Documentation"
 
 # Eris Chains Client Libraries
 
-[eris:db.js library overview](eris-db-js/)
+[eris:db.js library overview](eris-db.js/README.md)
 
 [eris:db.js library reference and specifications](eris-db.js/)
 
