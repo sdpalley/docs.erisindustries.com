@@ -1,3 +1,10 @@
+---
+
+layout:      flatdoc
+css:         flatdoc
+title:       "Documentation | eris:db Javascript API Client Library"
+
+---
 # erisdb-js (Alpha)
 
 This is a JavaScript API for communicating with a [ErisDB](https://github.com/eris-ltd/eris-db) server.
