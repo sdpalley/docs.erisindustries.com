@@ -193,11 +193,11 @@ node app.js
 
 That should output the following message:
 
-```shell
+```
 Listening for HTTP requests on port undefined.
 ```
 
-If you do not have any errors then you're all set to go.
+If you do not have any errors then you're all set to go.  Press `Control-C` to quit the app.
 
 # Make a Dockerfile
 
@@ -330,7 +330,7 @@ eris services logs idi
 
 The log should look like this:
 
-```shell
+```
 &npm info it worked if it ends with ok
 npm info using npm@2.15.1
 pm info using node@v4.4.3
@@ -439,7 +439,7 @@ Idi should have displayed the port.
 
 # Test the Microservice
 
-You can use `curl` to talk to the microservice's REST API.  First set the `host` variable based on which platform you're using:
+You can use `curl` to talk to your microservice's REST API.  First set the `host` variable based on which platform you're using:
 
 Linux:
 
@@ -468,7 +468,7 @@ $ curl $host:8080
 
 Let's check the log:
 
-```shell
+```
 $ eris services logs idi
 &npm info it worked if it ends with ok
 npm info using npm@2.15.1
