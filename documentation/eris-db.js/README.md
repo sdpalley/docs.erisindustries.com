@@ -1,7 +1,6 @@
 ---
 
-layout:      flatdoc
-css:         flatdoc
+layout:      wide
 title:       "Documentation | eris:db Javascript API Client Library"
 
 ---
