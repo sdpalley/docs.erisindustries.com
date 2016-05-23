@@ -13,22 +13,6 @@ To do this we will need to do two things: (1) docker-ize our scripts or daemons;
 
 Along the way we are going to learn more about how docker works and how `eris` leverages docker under the hood to simplify your blockchain application making and operating.
 
-Before we begin, please rerun the app.js from the [previous tutorial](/tutorials/contracts-interacting) and set idi's number to `>=150`.
-
-**N.B.**
-
-If you find yourself in the midst of this tutorial and need to reset idi's number and make it higher than you should be do this:
-
-```
-cd ~/.eris/apps/idi
-node app.js
-cd ~/.eris/apps/idi-service
-```
-
-And go about your day.
-
-**End N.B.**
-
 # Introduction
 
 What we are going to change up the old idi contract so that it does a few things for us which will be helpful for us to learn about docker and eris later.
@@ -55,68 +39,90 @@ Basically, services are daemons or microservices which you need for the applicat
 Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
 
 ```javascript
-'use strict';
+'use strict'
 
-var
-  contracts = require('eris-contracts'),
-  address = require('./epm.json').deployStorageK,
-  fs = require('fs'),
-  abi = JSON.parse(fs.readFileSync("./abi/" + address)),
-  account = require('./accounts.json'),
-  chainUrl = "http://localhost:1337/rpc",
-  manager, contract;
+var contracts = require('eris-contracts')
+var fs = require('fs')
+var http = require('http')
+var address = require('./epm.json').deployStorageK
+var abi = JSON.parse(fs.readFileSync('./abi/' + address, 'utf8'))
+var accounts = require('./accounts.json')
+var chainUrl
+var manager
+var contract
+var server
+
+chainUrl = 'http://localhost:1337/rpc'
 
 // Instantiate the contract object manager using the chain URL and the account
 // data.
-manager = contracts.newContractManagerDev(chainUrl, account.simplechain_full_000);
+manager = contracts.newContractManagerDev(chainUrl,
+  accounts.simplechain_full_000)
 
 // Instantiate the contract object using the ABI and the address.
-contract = manager.newContractFactory(abi).at(address);
+contract = manager.newContractFactory(abi).at(address)
 
-// Every second, display Idi's number and decrease it by one until 'times'
-// reaches 0.
-function iterate(times) {
-  if (times > 0) {
-    setTimeout(function () {
-      // Here we get the current number from the contract.
+// Create an HTTP server.
+server = http.createServer(function (request, response) {
+  var body
+  var value
+
+  switch (request.method) {
+    case 'GET':
+      console.log("Received request to get Idi's number.")
+
+      // Get the value from the contract and return it to the HTTP client.
       contract.get(function (error, result) {
-        var
-          number;
-
-        if (error)
-          console.error(error);
-        else {
-          number = parseInt(result['c'][0]);
-          console.log("Idi's number is:\t\t\t" + number);
-          console.log("\tlistening at:\t\t\t" + port);
-
-          // Set the new number in the contract.
-          contract.set(number - 1, function (error) {
-            if (error)
-              console.error(error);
-            else
-              iterate(times - 1);
-          });
+        if (error) {
+          response.statusCode = 500
+        } else {
+          response.statusCode = 200
+          response.setHeader('Content-Type', 'application/json')
+          response.write(JSON.stringify(result['c'][0]))
         }
-      });
-    }, 3000);
+
+        response.end('\n')
+      })
+
+      break
+
+    case 'PUT':
+      body = ''
+
+      request.on('data', function (chunk) {
+        body += chunk
+      })
+
+      request.on('end', function () {
+        value = JSON.parse(body)
+        console.log("Received request to set Idi's number to " + value + '.')
+
+        // Set the value in the contract.
+        contract.set(value, function (error) {
+          response.statusCode = error ? 500 : 200
+          response.end()
+        })
+      })
+
+      break
+
+    default:
+      response.statusCode = 501
+      response.end()
   }
-}
+})
 
-// establish a fake port to listen to....
-var port = process.env.IDI_PORT
-
-// note the number of times, defaulting to 5 to do the get -> set reduction
-var times = parseInt(process.env.TIMES) || 5
-
-iterate(times);
+// Tell the server to listen to incoming requests on the port specified in the
+// environment.
+server.listen(process.env.IDI_PORT, function () {
+  console.log('Listening for HTTP requests on port ' + process.env.IDI_PORT +
+    '.')
+})
 ```
 
-Note the changes between this script and the previous script. For one thing, all the connection and setup information is the same with the proviso that we've removed the command line require tool.
+Note the changes between this script and the previous script.  We've removed the interactive feature and replaced it with a [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) API server.
 
-The second minor change is that we have made small changes to simplify the getValue function as well as the setValue function. These changes are mostly cosmetic. Now whenever the `contract.get` (which is basically a better refactor of the `getValue` function from the previous tutorial) the contract is called it will display its results and then reduce the number by one. We have added a little ticker loop through the getValue sequence a few times.
-
-In addition we are going to the above changes to the functionality, we will be populating two variables from environment variables. In `docker`-land we often use environment variables as an easy way to get containers running how we want them.
+In addition, we will be populating two variables from environment variables. In `docker`-land we often use environment variables as an easy way to get containers running how we want them.
 
 With that in mind, when you're crafting services for to be used in docker, it is generally a good idea to use env variables for when you want to answer the "how should I be running" question. Obviously many services will also use config files, but for eris systems we generally find it is better when crafting services to override config files with envirnoment variables (and to override those with flags).
 
@@ -185,34 +191,17 @@ cd ~/.eris/apps/idi-service
 node app.js
 ```
 
-That should output something like this:
+That should output the following message:
 
-```irc
-Idi's number is:                        150
-        listening at:                   undefined
-Idi's number is:                        149
-        listening at:                   undefined
-Idi's number is:                        148
-        listening at:                   undefined
-Idi's number is:                        147
-        listening at:                   undefined
-Idi's number is:                        146
-        listening at:                   undefined
+```shell
+Listening for HTTP requests on port undefined.
 ```
 
 If you do not have any errors then you're all set to go.
 
-**Troubleshooting**
-
-If you reset your idi contract to >= 150 as noted in the beginning of this tutorial but when you ran the `node app.js` above your Idi number was at 5, then here is what happened. You are using the same chain, but you reran `eris pkgs do` this left the artifact of `epm.json` in the `idi-service` directory which pointed to the "new" contract that had the default number (5) instead of the "old" contract which we used for the `idi` directory in the previous tutorial.
-
-Fixing this is easy. What we want to do is to copy over the `epm.json` from the `~/.eris/apps/idi` directory into this directory so that when the `app.js` in the `idi-service` directory runs that it will talk to the "old" contract which has the number >= 150.
-
-**End Troubleshooting**
-
 # Make a Dockerfile
 
-Docker. People love it or they hate. We think has its place in the future of distributed systems and the marmots love it! Let's see how difficult it is to build a Dockerfile. First do this in your command line:
+Docker. People love it or they hate. We think has its place in the future of distributed systems and the marmots love it! Let's see how easy it is to build a Dockerfile. First do this in your command line:
 
 ```bash
 cd ~/.eris/apps/idi-service
@@ -339,30 +328,20 @@ But where did the output go? Because eris services are meant to get out of your 
 eris services logs idi
 ```
 
-You should see an error in the logs that looks something like this:
+The log should look like this:
 
-```irc
-npm info it worked if it ends with ok
-npm info using npm@2.14.20
-npm info using node@v4.4.0
-npm info prestart idis_app@0.0.1
+```shell
+&npm info it worked if it ends with ok
+npm info using npm@2.15.1
+pm info using node@v4.4.3
+!npm info prestart idis_app@0.0.1
 npm info start idis_app@0.0.1
 
-> idis_app@0.0.1 start /usr/src/app
+$> idis_app@0.0.1 start /usr/src/app
 > node app.js
 
-Error callback from sendTransaction
-[Error: Error: connect ECONNREFUSED 127.0.0.1:1337
-    at Object.exports._errnoException (util.js:870:11)
-    at exports._exceptionWithHostPort (util.js:893:20)
-    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1057:14)]
-npm info poststart idis_app@0.0.1
-npm info ok
+/Listening for HTTP requests on port undefined.
 ```
-
-This is expected. Not to worry.
-
-What is that error about? Well, what its telling us is that we cannot connect. Cannot connect to what? Well to the chain that we're trying to send contract transactions to. :)
 
 ## Add a Dependency to The Service Definition File
 
@@ -430,7 +409,7 @@ OK. Now let's rebuild the docker image and restart the service:
 
 ```bash
 docker build -t idiservice .
-eris services rm idi # to remove the old service container
+eris services rm --force idi # to remove the old service container
 eris services start idi
 eris services logs idi -f
 ```
@@ -439,52 +418,70 @@ That last command is similar to `tail -f` in that it will `follow` the logs unti
 
 # Modify Our Service Definition File
 
-Now that we've turned on idi a few times we'll be ready to change a few things. First let's change the number of times that idi's ticker runs by adding a `TIME` environment variable to our service definition file. In the `service` section of the service definition file add the following line:
-
-```toml
-environment = [ "TIMES=2" ]
-```
-
-Then run
-
-```bash
-eris services rm idi
-eris services start idi
-eris services logs idi -f
-```
-
-This time, instead of ticking 5 times, idi ticked 2 times! (This is why environment variables are so useful in dockerland.)
-
-If you're tired of editing files and love command lines, you're in luck! Cause we're about to start idi, but this time using a flag when we do it to set the environment variables.
-
-```bash
-eris services rm idi
-eris services start idi --env TIMES=3
-eris services logs idi -f
-```
-
-Pretty neat huh? OK. Now let's be a bit more realistic. Generally we will have two levels of variables we need to pass into a "thing we turn on or off". First is things that don't really change that much, like, for example a port. Second is things which change more frequently, like, for example the number of times to ping. Generally we always put the things that won't change that much as environment variables in the services definition file, and for variables which change more frequently we add the default in the environment variables and then override it from the command line flags when necessary to (as per what we just did above).
+Now that we've turned on idi a few times we'll be ready to change a few things.  We will have two levels of variables we need to pass into a "thing we turn on or off".  Generally we always put the things that won't change that much as environment variables in the services definition file, and for variables which change more frequently we add the default in the environment variables and then override it from the command line flags when necessary to.
 
 So now lets add in the port to get rid of that ugly `undefined` in the logs. Edit your idi service definition file to look like this:
 
 ```toml
-environment = ["IDI_PORT=8080", "TIMES=2"]
+ports = [ "8080:8080" ]
+environment = ["IDI_PORT=8080"]
 ```
 
 Then rerun the "normal" service:
 
 ```bash
-eris services rm idi
+eris services rm --force idi
 eris services start idi
-eris services logs idi -f
+eris services logs idi
 ```
 
-Idi should have ticked twice and displayed the port. Now let's run the "sometimes" service by modifying the services environment variables:
+Idi should have displayed the port.
 
-```bash
-eris services rm idi
-eris services start idi --env TIMES=3
-eris services logs idi -f
+# Test the Microservice
+
+You can use `curl` to talk to the microservice's REST API.  First set the `host` variable based on which platform you're using:
+
+Linux:
+
+```shell
+$ host=localhost
+```
+
+Mac OS/Windows:
+
+```shell
+$ host=$(docker-machine ip)
+```
+
+Now set Idi's number to 1234:
+
+```shell
+$ curl --request PUT --data 1234 $host:8080
+```
+
+And retrieve it:
+
+```shell
+$ curl $host:8080
+1234
+```
+
+Let's check the log:
+
+```shell
+$ eris services logs idi
+&npm info it worked if it ends with ok
+npm info using npm@2.15.1
+pm info using node@v4.4.3
+!npm info prestart idis_app@0.0.1
+npm info start idis_app@0.0.1
+
+$> idis_app@0.0.1 start /usr/src/app
+> node app.js
+
+*Listening for HTTP requests on port 8080.
+.Received request to set Idi's number to 1234.
+&Received request to get Idi's number.
 ```
 
 That's it! You've made a service! Now let's share it with our colleagues.
