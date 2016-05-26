@@ -105,13 +105,13 @@ The set job simply sets a variable. eris:package_manager includes a very naive k
 
 ### Job 2: Deploy Job
 
-This job will compile and deploy the `idi.sol` contract using Eris' compiler service (or run your own locally). The job will wait for the deploy transaction to confirm before it will procede.
+This job will compile and deploy the `idi.sol` contract using Eris' compiler service (or run your own locally). The job will wait for the deploy transaction to confirm before it will proceed.
 
 ### Job 3: Call Job
 
 This job will send a call to the contract. eris:package_manager will automagically utilize the abi's produced during the compilation process and allow users to formulate contracts calls using the very simple notation of `functionName` `params`. eris:package_manager also allows for variable expansion.
 
-So what this job is doing is this. The job is pulling the value of the `$setStorage` job (eris:package_manager knows this because it resolved `$` + `jobName` to the result of the `setStorage` job) and replacing that with the value, which is `5`. Then it will send that `5` value to the `set` function of the contract which is at the `destination` that is the result of the `deployStorageK` job; in other words the result of Job 3. For more on variables in eris:package_manager, please see the [variables specification](/documentation/eris-pm/latest/variable_specification/)
+So what this job is doing is this. The job is pulling the value of the `$setStorageBase` job (eris:package_manager knows this because it resolved `$` + `jobName` to the result of the `setStorageBase` job) and replacing that with the value, which is `5`. Then it will send that `5` value to the `set` function of the contract which is at the `destination` that is the result of the `deployStorageK` job; in other words the result of Job 3. For more on variables in eris:package_manager, please see the [variables specification](/documentation/eris-pm/latest/variable_specification/)
 
 Finally, it is waiting on the call to be sunk into a block before it will proceed.
 
