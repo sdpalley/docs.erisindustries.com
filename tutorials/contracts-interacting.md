@@ -144,7 +144,7 @@ The first function, the `getValue` function will call the `get` function of `idi
 
 The second function is a simple function which will prompt the user to change the value (there is no validation here to make sure it is a number, so when playing with this just sure make it is a number). Once the user has entered what the value should be then the `setValue` function will be called.
 
-The final function, the `setValue` function will call the `set` function of `idi.sol`. It will sign the transaction using the account data populated in the account.json file and then send it to the chain. It will block until the transaciton has been added to a block after which the callback will fire. The callback here is very simple in that it calls the `getValue` function to display what the result is after the `setValue` transaction has happened.
+The final function, the `setValue` function will call the `set` function of `idi.sol`. It will sign the transaction using the account data populated in the account.json file and then send it to the chain. It will block until the transaction has been added to a block after which the callback will fire. The callback here is very simple in that it calls the `getValue` function to display what the result is after the `setValue` transaction has happened.
 
 The beginning of the script, which gets everything sets up includes this line:
 

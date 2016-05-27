@@ -15,13 +15,14 @@ Along the way we are going to learn more about how docker works and how `eris` l
 
 # Introduction
 
-What we are going to change up the old idi contract so that it does a few things for us which will be helpful for us to learn about docker and eris later.
+We are going to change the old idi contract so that it does a few things for us, which will be helpful for us to learn about docker and eris later.
 
 # Copy Over Your Previous `idi` Application
 
 ```bash
 cd ~/.eris/apps # or, wherever you made the idi app
 cp -r idi idi-service # or whatever you would like to call it
+cd ~/.eris/apps/idi-service
 ```
 
 That will give us a new base application. Now this tutorial will assume that your simple chain is still around and that all of the key and capabilities based permission is all well and good. It will also assume that your contracts are running on the chain. If you have followed the previous tutorials and are coming back to this later with no docker containers or anything (but you have all of the old files on your hard drive) that is a-OK. With `eris` we can get you back up and running in no time.
@@ -35,8 +36,6 @@ eris services
 ```
 
 Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the app.js so it does a few things differently than the little cli version of idi we built before.
-
-Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
 
 ```javascript
 'use strict'
@@ -120,6 +119,8 @@ server.listen(process.env.IDI_PORT, function () {
 })
 ```
 
+Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
+
 Note the changes between this script and the previous script.  We've removed the interactive feature and replaced it with a [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) API server.
 
 In addition, we will be populating two variables from environment variables. In `docker`-land we often use environment variables as an easy way to get containers running how we want them.
@@ -187,7 +188,6 @@ If you have been following this tutorial sequence so far that checklist should f
 ## Step 3: Run the New app.js
 
 ```bash
-cd ~/.eris/apps/idi-service
 node app.js
 ```
 
@@ -199,6 +199,22 @@ Listening for HTTP requests on port undefined.
 
 If you do not have any errors then you're all set to go.  Press `Control-C` to quit the app.
 
+**Troubleshooting**
+
+If you are on Windows you will likely get the following error:
+
+```irc
+ internal/net.js:17
+    throw new RangeError('"port" argument must be >= 0 and < 65536');
+    ^
+```
+
+You can fix this with:
+
+```bash
+export IDI_PORT=1111
+```
+
 # Make a Dockerfile
 
 Docker. People love it or they hate. We think has its place in the future of distributed systems and the marmots love it! Let's see how easy it is to build a Dockerfile. First do this in your command line:
@@ -208,7 +224,7 @@ cd ~/.eris/apps/idi-service
 touch Dockerfile
 ```
 
-Then open the Dockerfile in your favorite text editor.
+Then open the Dockerfile in your favorite text editor, and add the following line:
 
 ```docker
 FROM node:4-onbuild
@@ -241,9 +257,9 @@ What that's going to do is to tell Docker to take this directory and build the D
 
 **Troubleshooting**
 
-If you are behind a firewall then you may need to let npm know which proxy to use to tunnel through the firewall. To do that you'll need to refactor your dockerfile too look something like this:
+If you are behind a firewall then you may need to let npm know which proxy to use to tunnel through the firewall. To do that you'll need to refactor your dockerfile to look something like this:
 
-```
+```docker
 FROM node:4.3.0
 
 RUN mkdir -p /usr/src/app
@@ -284,7 +300,7 @@ node                  4-onbuild           9e1063b1a9cd        11 days ago       
 quay.io/eris/keys     latest              7db20d196c40        11 days ago         756.7 MB
 ```
 
-Note in the above, the `REPOSITORY` field and the `TAG` field. When we build docker images, they will generally default to a `latest` in the tag field. This is what can be analogized to our "master" branch. Docker generally thinks more in terms of "channels" than in fixed versions for many of the images produced within the docker ecosystem. In other words, generally docker image maintainers treat their images like Chrome "channels" than like git "branches".
+Note in the above, the `REPOSITORY` field and the `TAG` field. When we build docker images, they will generally default to a `latest` in the tag field. This is what can be analogized to our "master" branch. Docker generally thinks more in terms of "channels" than in fixed versions for many of the images produced within the docker ecosystem. In other words, generally docker image maintainers treat their images like Chrome "channels" rather than git "branches".
 
 The ideas are similar.
 
@@ -420,9 +436,13 @@ That last command is similar to `tail -f` in that it will `follow` the logs unti
 
 Now that we've turned on idi a few times we'll be ready to change a few things.  We will have two levels of variables we need to pass into a "thing we turn on or off".  Generally we always put the things that won't change that much as environment variables in the services definition file, and for variables which change more frequently we add the default in the environment variables and then override it from the command line flags when necessary to.
 
-So now lets add in the port to get rid of that ugly `undefined` in the logs. Edit your idi service definition file to look like this:
+So now lets add in the port to get rid of that ugly `undefined` in the logs. Edit the `[service]` section of your idi service definition file to look like this:
 
 ```toml
+[service]
+name = "idi"
+image = "idiservice"
+data_container = true
 ports = [ "8080:8080" ]
 environment = ["IDI_PORT=8080"]
 ```
@@ -488,9 +508,13 @@ That's it! You've made a service! Now let's share it with our colleagues.
 
 # Share Your Service
 
-First things first, you'll need a Docker Hub to push to. So make sure you have a [Docker Hub](https://hub.docker.com/) account, [quay.io](quay.io) (which we use at eris and have been very satisfied with),or an account with a corporate Docker Registry.
+First things first, you'll need a Docker Hub to push to. So make sure you have a [Docker Hub](https://hub.docker.com/) account, [quay.io](quay.io) (which we use at eris and have been very satisfied with),or an account with a corporate Docker Registry. Then make sure you are logged in:
 
-We will assume for the purposes of this tutorial that `idi` was able to register the `idi` user name on Docker Hub. You should substitute `idi/` for your username (+ a `/` :-) ). Let's get that docker image ready to be published to the world and then lets publish it.
+```bash
+docker login
+```
+
+We will assume for the purposes of this tutorial that `idi` was able to register the `idi` user name on Docker Hub.  "You should subsitute `idi/` with your username, like: `username/`. Let's get that docker image ready to be published to the world and then lets publish it.
 
 ```bash
 docker tag idiservice idi/idiservice
@@ -508,10 +532,16 @@ Remember to use your username, not idi's.
 Now. Let's fire up IPFS because we will be using it to share our service definition file.
 
 ```bash
+eris services ls
+```
+
+Check that it is running. If it is not running then start it with:
+
+```bash
 eris services start ipfs
 ```
 
-Check that it is running. Then let's export our service to the world.
+Then let's export our service to the world.
 
 ```bash
 eris services export idi
