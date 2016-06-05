@@ -77,7 +77,7 @@ and simple to wrangle the dragons of smart contract blockchains.
 
 # Test Coverage
 
-- [Comprehensive Stack Tests Status & Godoc Links](/tests/test_coverage.md)
+- [Comprehensive Stack Tests Status & Godoc Links](/tests/test_coverage/)
 
 # Community
 
