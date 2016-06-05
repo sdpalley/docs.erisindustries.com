@@ -75,6 +75,10 @@ and simple to wrangle the dragons of smart contract blockchains.
 - [Working with the blockchain using bash and curl](/tutorials/tool-specific/eris_by_curl)
 - [Updating your genesis.json](/tutorials/tool-specific/genesisupdating/)
 
+# Test Coverage
+
+- [Comprehensive Stack Tests Status & Godoc Links](/tests/test_coverage.md)
+
 # Community
 
 Click on the `connect` menu above to discover the Eris community and get support.
