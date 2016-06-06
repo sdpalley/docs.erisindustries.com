@@ -29,13 +29,13 @@ That will give us a new base application. Now this tutorial will assume that you
 
 # Change Idi's `app.js`
 
-In the previous tutorial Idi was interactive. Typically interactive (clis) are not what we would use `eris-services` for. So what are eris-services? Let's ask `eris`.
+In the previous tutorial Idi was interactive. Typically interactive applications (CLIs) are not what we would use `eris-services` for. So what are eris-services? Let's ask `eris`.
 
 ```bash
 eris services
 ```
 
-Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the app.js so it does a few things differently than the little cli version of idi we built before.
+Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the `app.js` so it does a few things differently than the little cli version of idi we built before.
 
 ```javascript
 'use strict'
@@ -119,45 +119,45 @@ server.listen(process.env.IDI_PORT, function () {
 })
 ```
 
-Copy this as the new app.js. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
+Copy this as the new `app.js`. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
 
 Note the changes between this script and the previous script.  We've removed the interactive feature and replaced it with a [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) API server.
 
 In addition, we will be populating two variables from environment variables. In `docker`-land we often use environment variables as an easy way to get containers running how we want them.
 
-With that in mind, when you're crafting services for to be used in docker, it is generally a good idea to use env variables for when you want to answer the "how should I be running" question. Obviously many services will also use config files, but for eris systems we generally find it is better when crafting services to override config files with envirnoment variables (and to override those with flags).
+With that in mind, when you're crafting services for to be used in docker, it is generally a good idea to use env variables for when you want to answer the "how should I be running" question. Obviously many services will also use config files, but for eris systems we generally find it is better when crafting services to override config files with environment variables (and to override those with flags).
 
 # A Quick Test
 
-Lets do a quick test to make sure everything appears to be running correctly before we build this script into a docker image and subsequently into an eris service.
+Let's do a quick test to make sure everything appears to be running correctly before we build this script into a docker image and subsequently into an eris service.
 
-## Step 1: Get the Chain On.
+## Step 1: Get the Chain On
 
 ```bash
 eris chains ls
 ```
 
-If your simplechain is running then you're chain is on, please skip to the last step in this `Quick Test` section.
+If your simplechain is running, then you're chain is on, please skip to the last step in this `Quick Test` section.
 
-If your simplechain is present but not running then just start it with.
+If your simplechain is present but not running, then just start it with:
 
 ```bash
 eris chains start simplechain
 ```
 
-If your simplechain is not present then just start it with.
+If your simplechain is not present, then just start it with:
 
 ```bash
 eris chains new simplechain --dir simplechain
 ```
 
-As usual, `eris` is a quiet tool. Let's make sure our chain is running.
+As usual, `eris` is a quiet tool. Let's make sure our chain is running:
 
 ```bash
 eris chains ls
 ```
 
-## Step 2: Deploy the Contracts.
+## Step 2: Deploy the Contracts
 
 Let's get our address as in previous tutorials:
 
@@ -173,15 +173,15 @@ eris pkgs do --chain simplechain --address $addr
 
 **Troubleshooting**
 
-If you get an accounts not registered error, then check the following:
+If you get an _accounts not registered_ error, then check the following:
 
-* what are your addresses (`cat $chain_dir/addrX`)?
-* are those addresses known to eris keys (`eris actions do keys list`)?
-* are those addresses in the genesis block (`eris chains cat simplechain genesis`)?
-* what account does your epm.yaml use (`cat ~/.eris/apps/idi/epm.yaml`)?
-* what account does your account.json use (`cat ~/.eris/apps/idi-service/account.json`)?
+* What are your addresses (`cat $chain_dir/addrX`)?
+* Are those addresses known to eris keys (`eris actions do keys list`)?
+* Are those addresses in the genesis block (`eris chains cat simplechain genesis`)?
+* What account does your `epm.yaml` use (`cat ~/.eris/apps/idi/epm.yaml`)?
+* What account does your `account.json` use (`cat ~/.eris/apps/idi-service/account.json`)?
 
-If you have been following this tutorial sequence so far that checklist should ferret out your problem (or you can find where to find the fix!).
+If you have been following this tutorial sequence so far, that checklist should ferret out your problem (or you can find where to find the fix!).
 
 **End Troubleshooting**
 
@@ -197,11 +197,11 @@ That should output the following message:
 Listening for HTTP requests on port undefined.
 ```
 
-If you do not have any errors then you're all set to go.  Press `Control-C` to quit the app.
+If you do not have any errors, then you're all set to go.  Press `Control-C` to quit the app.
 
 **Troubleshooting**
 
-If you are on Windows you will likely get the following error:
+If you are on Windows, you will likely get the following error:
 
 ```irc
  internal/net.js:17
@@ -217,7 +217,7 @@ export IDI_PORT=1111
 
 # Make a Dockerfile
 
-Docker. People love it or they hate. We think has its place in the future of distributed systems and the marmots love it! Let's see how easy it is to build a Dockerfile. First do this in your command line:
+Docker. People love it or they hate. We think it has its place in the future of distributed systems and the marmots love it! Let's see how easy it is to build a Dockerfile. First do this in your command line:
 
 ```bash
 cd ~/.eris/apps/idi-service
@@ -230,7 +230,7 @@ Then open the Dockerfile in your favorite text editor, and add the following lin
 FROM node:4-onbuild
 ```
 
-That's all we need to tell docker what to do here, fun ha! Now we need to make one more change to our package.json. Edit it so it looks like this:
+That's all we need to tell docker what to do here, fun ha! Now we need to make one more change to our `package.json`. Edit it so it looks like this:
 
 ```json
 {
@@ -243,7 +243,7 @@ That's all we need to tell docker what to do here, fun ha! Now we need to make o
 }
 ```
 
-Note the changes here, we have added a [start script](https://docs.npmjs.com/misc/scripts#default-values) to the package.json and we have removed the dependency for the command line tool.
+Note the changes here, we have added a [start script](https://docs.npmjs.com/misc/scripts#default-values) to the `package.json` and we have removed the dependency for the command line tool (_prompt_).
 
 # Build Idi's Image
 
@@ -253,11 +253,11 @@ OK. Now we're ready to build our docker image!
 docker build -t idiservice .
 ```
 
-What that's going to do is to tell Docker to take this directory and build the Dockerfile in it. After it does its going to give it a `tag` of `idiservice`. When you build a docker image you will nearly always give it a `tag`. Tags in dockerland are like `names` in other lands.
+What this is going to do is to tell Docker to take this directory and build the `Dockerfile` in it. After it does, it's going to give it a `tag` of `idiservice`. When you build a docker image you will nearly always give it a `tag`. Tags in dockerland are like `names` in other lands.
 
 **Troubleshooting**
 
-If you are behind a firewall then you may need to let npm know which proxy to use to tunnel through the firewall. To do that you'll need to refactor your dockerfile to look something like this:
+If you are behind a firewall, then you may need to let npm know which proxy to use to tunnel through the firewall. To do that, you'll need to refactor your `Dockerfile` to look something like this:
 
 ```docker
 FROM node:4.3.0
@@ -276,11 +276,11 @@ CMD [ "npm", "start" ]
 
 **End Troubleshooting**
 
-## What is a Docker Image
+## What is a Docker Image?
 
-A [Docker Image](https://docs.docker.com/engine/introduction/understanding-docker/) is a layered, statically compiled, file system. Each line in a Dockerfile represents a way to build the require functionality that is included in the produced docker image. You can think of docker images as _the thing_ that can get us a whole lot of verifiable computing because of its deterministic methods of building and static nature. Once a docker image is built it can never be changed. (But you can remove it and replace it with a new docker image of the same name of course).
+A [Docker Image](https://docs.docker.com/engine/introduction/understanding-docker/) is a layered, statically compiled, file system. Each line in a Dockerfile represents a way to build the required functionality that is included in the produced docker image. You can think of docker images as _the thing_ that can get us a whole lot of verifiable computing because of its deterministic methods of building and static nature. Once a docker image is built, it can never be changed. (But you can remove it and replace it with a new docker image of the same name of course).
 
-In other words, its the "thing" that we're going to "turn on or off" with the eris services commands. To see the docker images which we have available to us locally type:
+In other words, it's the "thing" that we're going to "turn on or off" with the eris services commands. To see the docker images which we have available to us locally type:
 
 ```bash
 docker images
@@ -300,7 +300,7 @@ node                  4-onbuild           9e1063b1a9cd        11 days ago       
 quay.io/eris/keys     latest              7db20d196c40        11 days ago         756.7 MB
 ```
 
-Note in the above, the `REPOSITORY` field and the `TAG` field. When we build docker images, they will generally default to a `latest` in the tag field. This is what can be analogized to our "master" branch. Docker generally thinks more in terms of "channels" than in fixed versions for many of the images produced within the docker ecosystem. In other words, generally docker image maintainers treat their images like Chrome "channels" rather than git "branches".
+Note in the above, the `REPOSITORY` field and the `TAG` field. When we build docker images, they will generally default to a `latest` in the tag field. This is what can be analogized to our "master" branch. Docker generally thinks more in terms of "channels" than in fixed versions for many of the images produced within the docker ecosystem. In other words, generally docker image maintainers treat their images like Chrome "channels" rather than Git "branches".
 
 The ideas are similar.
 
@@ -336,9 +336,9 @@ That should return you to your command line with no output. This is by design. L
 eris services ls
 ```
 
-Your service may or may not be running, depending on how fast you copy/paste. If the service is running and you wait a few seconds eventually it will stop running. As we know from our testing it will loop through the sequence and then exit.
+Your service may or may not be running, depending on how fast you copy/paste. If the service is running and you wait a few seconds, eventually it will stop running. As we know from our testing it will loop through the sequence and then exit.
 
-But where did the output go? Because eris services are meant to get out of your way we keep the logs hidden from your view until you want to see what is happening. But now we do, so let's look through the logs:
+But where did the output go? Because eris services are meant to get out of your way, we keep the logs hidden from your view until you want to see what is happening. But now we do, so let's look through the logs:
 
 ```bash
 eris services logs idi
@@ -359,9 +359,9 @@ $> idis_app@0.0.1 start /usr/src/app
 /Listening for HTTP requests on port undefined.
 ```
 
-## Add a Dependency to The Service Definition File
+## Add a Dependency to the Service Definition File
 
-To edit a service definition file we can either open `~/.eris/services/idi.toml` in our favorit text editor, of if you have an EDITOR variable set in for your shell then just
+To edit a service definition file we can either open `~/.eris/services/idi.toml` in our favorite text editor, of if you have an `EDITOR` variable set in for your shell, then just use:
 
 ```bash
 eris services edit idi
@@ -399,7 +399,7 @@ repository = ""
 website = ""
 ```
 
-What changed here? Well we added a `dependency` of the chain. And we used the eris name of the chain we've been working with. We could also have that link be:
+What changed here? Well, we added a `dependency` on the chain. And we used the eris name of the chain we've been working with. We could also have that link be:
 
 ```toml
 chains = ["$chain"]
@@ -407,11 +407,11 @@ chains = ["$chain"]
 
 Which would tell eris to use the "current chain" that was given to the service by flags. But we don't need to worry about that just now. Let's "hard code" in the chain for now. So do not do the above for the purposes of this tutorial.
 
-What are dependencies to eris. Well they tell eris under the hood to make sure that the dependent service (yes, services can depend on other services, see your mindy service with `eris services cat mindy` for a complex example) or chain is up and running before the "target" service or chain is started. Not only that but eris will make sure [there is a docker link](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) between the dependency and the target service. This is very helpful because we no longer need to worry about IP addresses, hurray!
+What are dependencies to eris? Well, they tell eris under the hood to make sure that the dependent service (yes, services can depend on other services, see your mindy service with `eris services cat mindy` for a complex example) or chain is up and running before the "target" service or chain is started. Not only that, but eris will make sure [there is a docker link](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) between the dependency and the target service. This is very helpful because we no longer need to worry about IP addresses, hurray!
 
 ## Updating our app.js for Dockerizing
 
-Now we need to change one line of our app.js. The line where the `chainUrl` variable is set to read like this:
+Now we need to change one line in our `app.js`. The line where the `chainUrl` variable is set needs to read like this:
 
 ```javascript
 chainUrl = "http://simplechain:1337/rpc"
@@ -419,7 +419,7 @@ chainUrl = "http://simplechain:1337/rpc"
 
 Note that we use `simplechain` here which is what we want. When eris has a dependent chain it will mount it using the `simplechain` name. This means that anything running inside the service can ping the "attached" chain at `http://simplechain`. Note, if we had used the `$chain` variable then it would be mounted as `chain` instead of `simplechain`.
 
-If the keys service had been added to the dependencies (although under a services field) then it would be available at `http://keys`. Pretty neat huh!?
+If the keys service had been added to the dependencies (although under a services field) then it would be available at `http://keys`. Pretty neat, huh!?
 
 OK. Now let's rebuild the docker image and restart the service:
 
@@ -430,13 +430,13 @@ eris services start idi
 eris services logs idi -f
 ```
 
-That last command is similar to `tail -f` in that it will `follow` the logs until it exits or you press `contrl+c`. Wow. So that's pretty neat!
+That last command is similar to `tail -f` in that it will `follow` the logs until it exits or you press `Control-C`. Wow. So that's pretty neat!
 
-# Modify Our Service Definition File
+# Modify our Service Definition File
 
 Now that we've turned on idi a few times we'll be ready to change a few things.  We will have two levels of variables we need to pass into a "thing we turn on or off".  Generally we always put the things that won't change that much as environment variables in the services definition file, and for variables which change more frequently we add the default in the environment variables and then override it from the command line flags when necessary to.
 
-So now lets add in the port to get rid of that ugly `undefined` in the logs. Edit the `[service]` section of your idi service definition file to look like this:
+So now let's add in the port to get rid of that ugly `undefined` in the logs. Edit the `[service]` section of your idi service definition file to look like this:
 
 ```toml
 [service]
@@ -455,7 +455,7 @@ eris services start idi
 eris services logs idi
 ```
 
-Idi should have displayed the port.
+Idi should now have displayed the port.
 
 # Test the Microservice
 
@@ -506,15 +506,15 @@ $> idis_app@0.0.1 start /usr/src/app
 
 That's it! You've made a service! Now let's share it with our colleagues.
 
-# Share Your Service
+# Share your Service
 
-First things first, you'll need a Docker Hub to push to. So make sure you have a [Docker Hub](https://hub.docker.com/) account, [quay.io](quay.io) (which we use at eris and have been very satisfied with),or an account with a corporate Docker Registry. Then make sure you are logged in:
+First things first, you'll need a Docker Hub to push to. So make sure you have a [Docker Hub](https://hub.docker.com/) account, [quay.io](quay.io) (which we use at eris and have been very satisfied with), or an account with a corporate Docker Registry. Then make sure you are logged in:
 
 ```bash
 docker login
 ```
 
-We will assume for the purposes of this tutorial that `idi` was able to register the `idi` user name on Docker Hub.  "You should subsitute `idi/` with your username, like: `username/`. Let's get that docker image ready to be published to the world and then lets publish it.
+We will assume for the purposes of this tutorial that `idi` was able to register the `idi` user name on Docker Hub. You should subsitute `idi/` with your username, like: `username/`. Let's get that docker image ready to be published to the world and then let's publish it.
 
 ```bash
 docker tag idiservice idi/idiservice
@@ -529,7 +529,7 @@ image = "idi/idiservice"
 
 Remember to use your username, not idi's.
 
-Now. Let's fire up IPFS because we will be using it to share our service definition file.
+Now, let's fire up IPFS because we will be using it to share our service definition file.
 
 ```bash
 eris services ls
@@ -555,10 +555,10 @@ Uploading =>                    /home/coda/.eris/services/idi.toml:http://0.0.0.
                                          hash=QmUxawH7yTQxPh4HZLSC1FsWGYy3XhJaBrhshZd78HWgkX
 ```
 
-If it did, then the IPFS hash of the service definition file is would be `QmUxawH7yTQxPh4HZLSC1FsWGYy3XhJaBrhshZd78HWgkX`. Post that on your slack with a handy note for your colleagues:
+If it did, then the IPFS hash of the service definition file would be `QmUxawH7yTQxPh4HZLSC1FsWGYy3XhJaBrhshZd78HWgkX`. Post that on your Slack with a handy note for your colleagues:
 
 ```irc
-Hey, idi's service is ready for testing, please `eris services import idi QmUxawH7yTQxPh4HZLSC1FsWGYy3XhJaBrhshZd78HWgkX && eris services start idi` to get up to speed.
+Hey, idi's service is ready for testing, please run `eris services import idi QmUxawH7yTQxPh4HZLSC1FsWGYy3XhJaBrhshZd78HWgkX && eris services start idi` to get up to speed.
 ```
 
 Obviously with your own language and your own hash.
