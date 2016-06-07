@@ -38,7 +38,7 @@ mkdir idi
 cd idi
 ```
 
-Now you'll make a file in this directory. Let's assume that is called idi.sol and has the following contents
+Now you'll make a file in this directory. Let's assume that is called `idi.sol` and has the following contents
 
 ```javascript
 contract IdisContractsFTW {
@@ -54,11 +54,11 @@ contract IdisContractsFTW {
 }
 ```
 
-What does this contract do? Well, it isn't very interesting we know. It merely `gets` and `sets` a value which is an unsigned integer type. **Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/idi.sol -o idi.sol` rather than copy pasting.
+What does this contract do? Well, it isn't very interesting, we know. It merely `gets` and `sets` a value which is an unsigned integer type. **Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/idi.sol -o idi.sol` rather than copy pasting.
 
 # Fixup your epm.yaml
 
-Next we need to make an epm.yaml and make it look something like this:
+Next we need to make an `epm.yaml` and make it look something like this:
 
 ```yaml
 jobs:
@@ -97,11 +97,11 @@ jobs:
 
 **Protip:** Get the file with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/epm.yaml -o epm.yaml`
 
-Now. What does this file mean? Well, this file is the manager file for how to deploy and test your smart contracts. eris:package_manager will read this file and perform a sequence of `jobs` with the various parameters supplied for the job type. It will perform these in the order they are built into the yaml file. So let's go through them one by one and explain what each of these jobs are doing. For more on using various jobs [please see the jobs specification](/documentation/eris-pm/latest/jobs_specification/).
+Now, what does this file mean? Well, this file is the manager file for how to deploy and test your smart contracts. `eris:package_manager` will read this file and perform a sequence of `jobs` with the various parameters supplied for the job type. It will perform these in the order they are built into the yaml file. So let's go through them one by one and explain what each of these jobs are doing. For more on using various jobs [please see the jobs specification](/documentation/eris-pm/latest/jobs_specification/).
 
 ### Job 1: Set Job
 
-The set job simply sets a variable. eris:package_manager includes a very naive key value store which can be used for anything.
+The `set` job simply sets a variable. `eris:package_manager` includes a very naive key value store which can be used for pretty much anything.
 
 ### Job 2: Deploy Job
 
@@ -109,9 +109,9 @@ This job will compile and deploy the `idi.sol` contract using Eris' compiler ser
 
 ### Job 3: Call Job
 
-This job will send a call to the contract. eris:package_manager will automagically utilize the abi's produced during the compilation process and allow users to formulate contracts calls using the very simple notation of `functionName` `params`. eris:package_manager also allows for variable expansion.
+This job will send a call to the contract. `eris:package_manager` will automagically utilize the abi's produced during the compilation process and allow users to formulate contract calls using the very simple notation of `functionName` `params`. `eris:package_manager` also allows for variable expansion.
 
-So what this job is doing is this. The job is pulling the value of the `$setStorageBase` job (eris:package_manager knows this because it resolved `$` + `jobName` to the result of the `setStorageBase` job) and replacing that with the value, which is `5`. Then it will send that `5` value to the `set` function of the contract which is at the `destination` that is the result of the `deployStorageK` job; in other words the result of Job 3. For more on variables in eris:package_manager, please see the [variables specification](/documentation/eris-pm/latest/variable_specification/)
+So what this job is doing is this. The job is pulling the value of the `$setStorageBase` job (`eris:package_manager` knows this because it resolved `$` + `jobName` to the result of the `setStorageBase` job) and replacing that with the value, which is `5`. Then it will send that `5` value to the `set` function of the contract which is at the `destination` that is the result of the `deployStorageK` job; in other words the result of Job 3. For more on variables in `eris:package_manager`, please see the [variables specification](/documentation/eris-pm/latest/variable_specification/).
 
 Finally, it is waiting on the call to be sunk into a block before it will proceed.
 
@@ -119,11 +119,11 @@ Finally, it is waiting on the call to be sunk into a block before it will procee
 
 This job is going to send what are alternatively called `simulated calls` or just `queries` to an accessor function of a contract. In other words, these are `read` transactions. Generally the `query-contract` is married to an accessor function (such as `get` in the `idi.sol` contract). Usually accessor, or read only functions, in a solidity contracts are denoted as a `constant` function which means that any call sent to the contract will not update the state of the contract.
 
-The value returned from a query-contract job then is usually paired with an assert.
+The value returned from a `query-contract` job then is usually paired with an assert.
 
 ### Job 5: Assert Job
 
-In order to know that things have deployed or gone through correctly, you need to be able to assert relations. eris:package_manager provides you with:
+In order to know that things have deployed or gone through correctly, you need to be able to assert relations. `eris:package_manager` provides you with:
 
 * equality
 * non-equality
@@ -132,7 +132,7 @@ In order to know that things have deployed or gone through correctly, you need t
 * less than or equals (for integers & unsigned integers values only)
 * less than (for integers & unsigned integers values only)
 
-Relations can use either `eq` `ne` `ge` `gt` `le` `lt` syntax, or, in the alternative they can use `==` `!=` `>=` `>` `<=` `<` syntax in the relation field. This is similar to bash. To make this more explicit we have chosen in the above epm.yaml to use the `eq` syntax, but feel free to replace with `==` syntax if you want.
+Relations can use either `eq` `ne` `ge` `gt` `le` `lt` syntax, or, in the alternative they can use `==` `!=` `>=` `>` `<=` `<` syntax in the relation field. This is similar to Bash. To make this more explicit we have chosen in the above `epm.yaml` to use the `eq` syntax, but feel free to replace with `==` syntax if you want.
 
 Both the `key` and the `val` (which in other testing frameworks are the `given` and `expect`ed in an assert function) use variable expansion to compare the result of what was supposed to be sent to the `setStorageBase` job (which should have been sent to and stored in the contracts' storage) with what was received from the `queryStorage` job (which in turn called the `get` function of the contract).
 
@@ -153,7 +153,7 @@ CHAIN        ON     CONTAINER ID     DATA CONTAINER
 simplechain  *      efeeb0dd63       d06301b3a5
 ```
 
-whereas if it has been stopped, the `ON` field will have `-` rather than `*`. The same logic applies to services.
+Whereas if it has been stopped, the `ON` field will have `-` rather than `*`. The same logic applies to services.
 
 If simplechain is not running, then turn it on with:
 
@@ -163,7 +163,7 @@ eris chains start simplechain
 
 or create a new chain if simplechain no longer exists.
 
-Now, we are ready to deploy this world changing contract. Make sure you are in the `~/.eris/apps/idi` folder, or wherever you saved your epm.yaml. Note that this is a very common pattern in simple contract testing and development; namely to (1) deploy a contract; (2) send it some transactions (or `call`s); (3) query some results from the contract (or `query-contract`s); and (4) assert a result. As you get moving with contract development you will likely find yourself doing this a lot.
+Now, we are ready to deploy this world changing contract. Make sure you are in the `~/.eris/apps/idi` folder, or wherever you saved your `epm.yaml`. Note that this is a very common pattern in simple contract testing and development; namely to (1) deploy a contract; (2) send it some transactions (or `call`s); (3) query some results from the contract (or `query-contract`s); and (4) assert a result. As you get moving with contract development you will likely find yourself doing this a lot.
 
 ```bash
 addr=$(cat $chain_dir/addresses.csv | grep simplechain_full_000 | cut -d ',' -f 1)
@@ -180,9 +180,9 @@ You *should* be able to use any of the addresses you generated during the chainm
 
 (For those that do not know what is happening in that bash line: `cat` is used to "print the file" and "pipe" it into the second command; `grep` is a finder tool which will find the line which has the right name we want to use; the `cut` says split the line at the `,` and give me the first field).
 
-Note that eris:package_manager can override the account which is used in any single job and/or, eris:package_manager can set a default `account` job which will establish a default account within the yaml. We find setting the default account within the yaml to usually be counter-productive because others will not be able to easily use your yaml unless they have the same keys in their `eris-keys` (which we **never** recommend). For more on using accounts [please see the jobs specification](/documentation/eris-pm/latest/jobs_specification/).
+Note that `eris:package_manager` can override the account which is used in any single job and/or, `eris:package_manager` can set a default `account` job which will establish a default account within the yaml. We find setting the default account within the yaml to usually be counter-productive because others will not be able to easily use your yaml unless they have the same keys in their `eris-keys` (which we **never** recommend). For more on using accounts [please see the jobs specification](/documentation/eris-pm/latest/jobs_specification/).
 
-That's it! Your contract is all ready to go. You should see the output in `epm.json` which will have the transaction hash of the transactions as well as the address if the deployed `idi.sol` contract.
+That's it! Your contract is all ready to go. You should see the output in `epm.json` which will have the transaction hash of the transactions as well as the address of the deployed `idi.sol` contract.
 
 **Troubleshooting**
 
@@ -224,24 +224,24 @@ Error deploying contract idi.sol: unknown account 03E3FAC131CC111D78B569CEC45FA4
 Container edbae127e1a31f1f85fbe14359362f7943028e57dc5eec4d91a71df706f5240f exited with status 1
 ```
 
-This means that the account `03E3FAC131CC111D78B569CEC45FA42CE5DA8AD8` has not been registered in the genesis.json. The account which is not registered will be the same account you told epm to use via the signing server (`eris-keys`).
+This means that the account `03E3FAC131CC111D78B569CEC45FA42CE5DA8AD8` has not been registered in the `genesis.json`. The account which is not registered will be the same account you told epm to use via the signing server (`eris-keys`).
 
-To "see" your genesis.json then do this:
+To "see" your `genesis.json` then do this:
 
 ```
 eris chains cat simplechain genesis
 ```
 
-You can also see your genesis.json at `http://localhost:46657/genesis`. Note: replace `localhost` with the output of `docker-machine ip eris` if on OSX or Windows. See our [docker-machine tutorial](/tutorials/tool-specific/docker_machine/) for more information.
+You can also see your `genesis.json` at `http://localhost:46657/genesis`. Note: replace `localhost` with the output of `docker-machine ip eris` if on OSX or Windows. See our [docker-machine tutorial](/tutorials/tool-specific/docker_machine/) for more information.
 
 <hr />
 
-If the account you are trying to use has not been registered in the genesis.json (or, latterly, has not been given the appropriate [permissions](/documentation/eris-db-permissions/) via permission transactions) and been given the appropriate permissions, then it will not be able to perform the actions it needs to in order to deploy and test the contract. The easiest thing to do at this point is to [update your genesis.json](/tutorials/tool-specific/genesisupdating/).
+If the account you are trying to use has not been registered in the `genesis.json` (or, latterly, has not been given the appropriate [permissions](/documentation/eris-db-permissions/) via permission transactions) and been given the appropriate permissions, then it will not be able to perform the actions it needs to in order to deploy and test the contract. The easiest thing to do at this point is to [update your genesis.json](/tutorials/tool-specific/genesisupdating/).
 
 Once you have the following sorted:
 
-1. The account flag used matches a key which is known to the signing daemon; and
-2. The account flag used matches an account in the genesis.json of a chain;
+1. The provided account parameter matches a key which is known to the signing daemon; and
+2. The provided account parameter matches an account in the `genesis.json` of a chain;
 
 Then you'll be ready to:
 
@@ -262,7 +262,42 @@ Driver btrfs failed to remove root filesystem
 Failed to destroy btrfs snapshot: operation not permitted
 ```
 
-Then rerun the `pkgs do` command with the `--rm` flag at the end which will stop the containers from trying to be removed as part of the tear down sequence.
+Then rerun the `pkgs do` command with the `--rm` flag at the end, which will stop the containers from trying to be removed as part of the tear down sequence.
+
+<hr />
+
+If you have an error complaining about not being able to reach the compiler service, like this:
+
+```irc
+failed to send HTTP request Post https://compilers.eris.industries:10114/compile: dial tcp: i/o timeout
+Error compiling contracts
+Post https://compilers.eris.industries:10114/compile: dial tcp: i/o timeout
+```
+
+Then that means one of the following:
+
+* You're working offline, e.g. on the train, or
+* You're behind a corporate firewall/proxy and can't access the compiler URL.
+
+To fix this, you can either go online, or download and run the _compilers_ service locally by doing the following - you need to be online for this, though:
+
+```bash
+eris services start compilers
+```
+
+When you run this for the first time, it will download the _compilers_ Docker image, and then start the service.
+
+Once the service is running, you can deploy packages by adding the address of your compiler service to the command line parameters. Replace the IP address with your local IP address, depending on your OS. If you're on Windows or Mac OS X, you will have to use the Docker-Machine VM's IP address (`192.168.99.100` by default):
+
+```bash
+eris pkgs do --chain simplechain --address $addr --compiler 192.168.99.100:9091
+```
+
+When you're done with your work, you can stop the _compilers_ service like the other eris services:
+
+```bash
+eris services stop compilers
+```
 
 **End Troubleshooting**
 

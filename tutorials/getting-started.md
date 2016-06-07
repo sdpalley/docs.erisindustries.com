@@ -60,7 +60,7 @@ If VirtualBox gives you trouble, then use [docker machine's plugins](https://git
 
 ### OSX Only
 
-If you're a Homebrew user then:
+If you're a [Homebrew](https://brew.sh) user then:
 
 ```bash
 brew update
