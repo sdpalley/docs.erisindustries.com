@@ -22,7 +22,7 @@ title: "eris cheatsheet"
 | Command							| Notes					     		     |
 | ------------------------------------------------------------- | ---------------------------------------------------------- |
 | `docker-machine create --driver virtualbox eris`		| Create local docker machine for root account.		     |
-| `eval $(docker-machine env eris)`				| **Use first two commands** only if on !linux || !DockerBeta. |
+| `eval $(docker-machine env eris)`				| **Use first two commands** only if on !linux or !DockerBeta. |
 | `docker-machine create --driver digitalocean eris-val-0`	| Create cloud docker machine for first validator.	     |
 | `docker-machine create --driver digitalocean eris-val-1`	| Create cloud docker machine for second validator.	     |
 | `eris init -y --machine eris/eris-val-0/eris-val-1`		| Run `eris init` for each machine (two/three times).	     |
