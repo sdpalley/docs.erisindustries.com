@@ -443,8 +443,8 @@ So now let's add in the port to get rid of that ugly `undefined` in the logs. Ed
 name = "idi"
 image = "idiservice"
 data_container = true
-ports = [ "8080:8080" ]
-environment = ["IDI_PORT=8080"]
+ports = [ "8082:8082" ]
+environment = ["IDI_PORT=8082"]
 ```
 
 Then rerun the "normal" service:
@@ -476,13 +476,13 @@ $ host=$(docker-machine ip)
 Now set Idi's number to 1234:
 
 ```shell
-$ curl --request PUT --data 1234 $host:8080
+$ curl --request PUT --data 1234 $host:8082
 ```
 
 And retrieve it:
 
 ```shell
-$ curl $host:8080
+$ curl $host:8082
 1234
 ```
 
@@ -499,7 +499,7 @@ npm info start idis_app@0.0.1
 $> idis_app@0.0.1 start /usr/src/app
 > node app.js
 
-*Listening for HTTP requests on port 8080.
+*Listening for HTTP requests on port 8082.
 .Received request to set Idi's number to 1234.
 &Received request to get Idi's number.
 ```
