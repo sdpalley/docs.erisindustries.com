@@ -319,10 +319,10 @@ Great. Now we are ready to build the [service definition file](/documentation/er
 So let's start by adding a service!
 
 ```bash
-eris services new idi idiservice
+eris services make idi idiservice
 ```
 
-What is happening there with the `services new` command is that the first argument given to it (`idi`) is the name of the service and the second argument given is the docker image name (complete with tag if not `latest`; here we're going to use latest so we can skip it).
+What is happening there with the `services make` command is that the first argument given to it (`idi`) is the name of the service and the second argument given is the docker image name (complete with tag if not `latest`; here we're going to use latest so we can skip it).
 
 Now, let's run the service.
 

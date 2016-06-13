@@ -204,8 +204,8 @@ docker push quay.io/eris/toadserver:demo
 
 Once one has an image, the usual way to launch a docker container running that image is with `docker run` from the command line. This command specifies a ton of parameters (or not!) for deploying various applications. Working with a definition file simplifies a lot of things. (If you find similarities to `[docker-compose](https://docs.docker.com/compose/)`, that's because the `eris` tool is inspired from it. We'll first make one then I'll walk through equivalent `docker run` command. Start with:
 
-```basg
-eris services new toad quay.io/eris/toadserver:demo
+```bash
+eris services make toad quay.io/eris/toadserver:demo
 ```
 
 This creates a new service named "toad" with image "quay.io/eris/toadserver:demo" and writes it to `~/.eris/services/toad.toml`. See it then open it with:
