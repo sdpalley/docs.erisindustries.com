@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Automated test of Tutorials | Deploying your Smart Contracts to a Chain
-# https://docs.erisindustries.com/tutorials/contracts-deploying/
+echo "Deploying your Smart Contracts to a Chain - Eris v0.11"
+echo "https://docs.erisindustries.com/tutorials/contracts-deploying/"
+echo
 
 set -o errexit
 set -o xtrace
