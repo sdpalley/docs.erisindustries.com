@@ -67,7 +67,12 @@ brew update
 brew install eris
 ```
 
-If you intend to run Eris containers on your local machine:
+For release candidates:
+```bash
+brew install --devel eris
+```
+
+If you intend to run Eris containers on your local machine (vs running them on Docker Machine in the cloud):
 ```
 brew install virtualbox
 ```
