@@ -69,6 +69,7 @@ brew install eris
 
 For release candidates:
 ```bash
+brew update
 brew install --devel eris
 ```
 
