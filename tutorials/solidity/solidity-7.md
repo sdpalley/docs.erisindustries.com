@@ -31,7 +31,7 @@ This tutorial assumes you have worked through the following Solidity tutorials:
 
 # Accounts, Code and Storage
 
-A very important property of EVN contracts is that when a contract has been uploaded to the chain, the code can never be changed. Contracts are stored in special account objects, and these object has references to the contract (byte) code, and a database, and some other things. The database is a key-value store, also known as 'storage', and is where data such as the values of contract fields is stored.
+A very important property of EVM contracts is that when a contract has been uploaded to the chain, the code can never be changed. Contracts are stored in special account objects, and these object has references to the contract (byte) code, and a database, and some other things. The database is a key-value store, also known as 'storage', and is where data such as the values of contract fields is stored.
 
 When contracts are created, a new account is first made, then the code is loaded into a VM which runs the constructor part, initializes fields etc., and then adds the runtime portion (or body) of the contract to the account. After that is done, there is no way to change the code, and there is no way to update the database except through that code.
 
