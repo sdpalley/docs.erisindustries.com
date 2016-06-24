@@ -45,21 +45,19 @@ skip these steps as you want.
 
    1. Edit the `/etc/network/interfaces` file to change the wlan0 from `manual` mode to `dhcp`
 
-   ```bash
-   ...
-   ...
-   allow-hotplug wlan0                                                             
-   iface wlan0 inet dhcp                                                           
-       wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf      
-   ...
-   ...
-   ```
+      ```bash
+      ...
+      allow-hotplug wlan0                                                             
+      iface wlan0 inet dhcp                                                           
+          wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf      
+      ...
+      ```
 
    2. Append the Wi-Fi login credential to `wpa_supplicant.conf`.
 
-   ```bash
-   wpa_passphrase {SSID} {PASSWORD} | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf 
-   ```
+      ```bash
+      wpa_passphrase {SSID} {PASSWORD} | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf 
+      ```
 
    3. Restart `wlan0` by `sudo ifdown wlan0 && sudo ifup wlan0`
    
@@ -118,27 +116,30 @@ Then copy the ssh credential to each nodes by `ssh-copy-id USER@TARGET_NODE_IP`.
 
 1. Create swarm discovery token
 
-```bash
-export TOKEN=$(for i in $(seq 1 32); do echo -n $(echo "obase=16; $(($RANDOM % 16))" | bc); done; echo) 
-```
+   ```bash
+   export TOKEN=$(for i in $(seq 1 32); do echo -n $(echo "obase=16; $(($RANDOM % 16))" | bc); done; echo) 
+   ```
 
 2. Provision master node
 
-```bash
-docker-machine create  --engine-storage-driver devicemapper -d generic --swarm --swarm-master --swarm-image hypriot/rpi-swarm:latest --swarm-discovery token://{TOKEN} --generic-ip-address {MASTER_IP_ADDR} --generic-ssh-user {USER} {MACHINE_NAME}
-```
+   ```bash
+   docker-machine create  --engine-storage-driver devicemapper -d generic --swarm --swarm-master \
+    --swarm-image hypriot/rpi-swarm:latest --swarm-discovery token://{TOKEN} --generic-ip-address {MASTER_IP_ADDR} \
+    --generic-ssh-user {USER} {MACHINE_NAME}
+   ```
 
 3. Provision slave node
 
-```bash
-docker-machine create  --engine-storage-driver devicemapper -d generic --swarm --swarm-image hypriot/rpi-swarm:latest --swarm-discovery token://{TOKEN} --generic-ip-address {MASTER_IP_ADDR} --generic-ssh-user {USER} {MACHINE_NAME}
-```
+   ```bash
+   docker-machine create  --engine-storage-driver devicemapper -d generic --swarm --swarm-image hypriot/rpi-swarm:latest \ 
+   --swarm-discovery token://{TOKEN} --generic-ip-address {MASTER_IP_ADDR} --generic-ssh-user {USER} {MACHINE_NAME}
+   ```
 
 4. Check swarm nodes information.
 
-```bash
-eval `docker-machine env --swarm {MASTER_MACHINE}`; docker info 
-```
+   ```bash
+   eval `docker-machine env --swarm {MASTER_MACHINE}`; docker info 
+   ```
 
 To unset the swarm docker environment, `docker-machine env --unset`.
 
