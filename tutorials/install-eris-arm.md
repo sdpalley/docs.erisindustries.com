@@ -10,7 +10,7 @@ This tutorial uses Raspberry Pi 3 as referenced ARM device to demonstrate how to
 ## Prerequisite
 
 * Raspberry Pi2 (RPi2) or RPi3.
-* At lease 32 GB micro-SD card to run Blockchain.
+* At least 32 GB micro-SD card to run Blockchain.
 * Latest Raspbian image or NOOBS system installer (https://www.raspberrypi.org/downloads/).
 
 
@@ -36,7 +36,7 @@ skip these steps as you want.
    Reconfigure the language locales ( to `en_US.UTF-8` for example):
 
    ```bash
-   Sudo dpkg-reconfigure locales
+   sudo dpkg-reconfigure locales
    ```
 
 3. Setup the wireless network.
