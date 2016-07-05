@@ -54,22 +54,29 @@ For the next step, we need another ip: `eris chains inspect bonding NetworkSetti
 ```bash
 eris chains exec bonding "mintx send --amt 200000 --to $addr_new --addr $addr_machine --chainID bonding --node-addr=ip:46657 --sign-addr=keys:4767 --sign --broadcast" --machine bonding
 ```
-where `--amt` is the amount to be sent from the validator (`--addr $addr_machine`) to the new account (`--to $addr_new`). Remember that `$addr_new` was created from `eris keys gen` above and `$addr_machine` can be seen with `eris keys ls --container --machine bonding` and is the address of the validator. We also specify the chain name (`--chainID bonding`) which must match the chain name used in `eris chains make/new`. Finally, `--node-addr` requires the `ip` gotten from the `eris chains inspect` command above and `--sign-addr` specifies the running keys container to sign from. `--sign` and `--broadcast` are bools that should be self-explanatory. Note again the `--machine bonding` flag outside of the `exec "..."`, which is is required because we are sending _from_ that node. You could of course ssh in, install eris, and run the command instead...but that's a lot more typing! 
+where `--amt` is the amount to be sent from the validator (`--addr $addr_machine`) to the new account (`--to $addr_new`). Remember that `$addr_new` was created from `eris keys gen` above and `$addr_machine` can be seen with `eris keys ls --container --machine bonding` and is the address of the validator. We also specify the chain name (`--chainID bonding`) which must match the chain name used in `eris chains make/new`. Finally, `--node-addr` requires the `ip` gotten from the `eris chains inspect` command above and `--sign-addr` specifies the running keys container to sign from. `--sign` and `--broadcast` are bools that should be self-explanatory. Note again the `--machine bonding` flag outside of the `exec "..."`, which is is required because we are sending _from_ that node. You could of course ssh in, install eris, and run the command instead...but that's a lot more typing!
+
+If the command was successfull, you'll see `Transaction Hash:` and in the browser: `ip:46657/list_accounts` will show `$addr_new` with the amount specified. This account can now bond.
 
 ### Send a bond tx from new account
 We'll need the pubkey: `$pub_new=$(eris keys pub $addr_new)`
 ```bash
 eris chains exec bonding "mintx bond --amt 150000 --pubkey $pub_new --to $addr_new --chainID bonding --node-addr=ip:46657 --sign-addr=keys:4767 --sign --broadcast"
 ```
-note a few things here: the `--machine bonding` flag has been omitted since we are now on a "new" host and would like to bond this new account. With `mintx unbond` the `--to` flag specifies the address to unbond to (see unbonding, below). As well, the `ip` in `--node-addr=ip:46657` could be different so make sure to first run `eris chains inspect bonding NetworkSettings.IPAddress` as above (but without the `--machine` flag. 
+The `Transaction Hash` should again output. Note a few things here: the `--machine bonding` flag has been omitted since we are now on a "new" host and would like to bond this new account. With `mintx unbond` the `--to` flag specifies the address to unbond to (see unbonding, below). As well, the `ip` in `--node-addr=ip:46657` could be different so make sure to first run `eris chains inspect bonding NetworkSettings.IPAddress` as above (but without the `--machine` flag. 
 
-// TODO: where to go look at things in browser; see the tx hash on output, etc. 
+If the command was successfull, in the browser at: `ip:46657/list_validators` you'll see that `$addr_new` has been added. 
 
 That's it! Create a new account, join the chain, send some tokens, post a bond. Marmots like bonds. 
 
-// TODO clean & setup for next round.
+To use with epm, clean up your old chain:
+```bash
+eris chains rm -xf --dir bonding
+eris chains rm -xf --dir bonding --machine bonding
+```
+and start it up again (# Get the chain sorted, above).
 
-# Using 'epm'
+# Using 'epm' (pkgs do)
 
 ### Send tokens
 ```bash
@@ -117,7 +124,7 @@ eris pkgs do --chain bonding --address $addr_machine --machine bonding
 ```
 If everything went well, you'll see `Assertion Succeeded` and there will be an `epm.json` output in `pwd`.
 
-### Send bond
+### Send bond tx
 
 ```bash
 cd ../send
@@ -165,10 +172,7 @@ using the same hardcoded `$addr_new` and `$pub_new` as in the previous sections.
 
 # Unbonding
 ### With exec/mintx
-
 ### With epm
 
 # Where to next?
-- epm specification
-- more info...
-- the burrow.
+- for more info on the `epm.yaml` specification, see 1) [the documentation on epm](/documentation/eris-pm) and follow the links for jobs/assert specs and 2) [the tests fixtures for epm](https://github.com/eris-ltd/eris-pm/tree/master/tests/fixtures) which describe many common actions.
