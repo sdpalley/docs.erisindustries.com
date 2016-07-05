@@ -63,12 +63,112 @@ eris chains exec bonding "mintx bond --amt 150000 --pubkey $pub_new --to $addr_n
 ```
 note a few things here: the `--machine bonding` flag has been omitted since we are now on a "new" host and would like to bond this new account. With `mintx unbond` the `--to` flag specifies the address to unbond to (see unbonding, below). As well, the `ip` in `--node-addr=ip:46657` could be different so make sure to first run `eris chains inspect bonding NetworkSettings.IPAddress` as above (but without the `--machine` flag. 
 
+// TODO: where to go look at things in browser; see the tx hash on output, etc. 
+
 That's it! Create a new account, join the chain, send some tokens, post a bond. Marmots like bonds. 
+
+// TODO clean & setup for next round.
 
 # Using 'epm'
 
+### Send tokens
+```bash
+cd ~/.eris/apps
+mkdir send bond
+cd send
+```
+Now, create an `epm.yaml` that looks like:
+```yaml
+jobs:
+
+- name: amt
+  job:
+    set:
+      val: 123456
+
+- name: receipient
+  job:
+    set:
+      val: $addr_new
+
+- name: sendTxTest1
+  job:
+    send:
+      destination: $receipient
+      amount: $amt
+      wait: true
+
+- name: sendTxQuery1
+  job:
+    query-account:
+      account: $receipient
+      field: balance
+
+- name: sendTxAssert1
+  job:
+    assert:
+      key: $sendTxQuery1
+      relation: eq
+      val: $amt
+```
+and replace `$addr_new` with the hardcoded value. Then run:
+```bash
+eris pkgs do --chain bonding --address $addr_machine --machine bonding
+```
+If everything went well, you'll see `Assertion Succeeded` and there will be an `epm.json` output in `pwd`.
+
+### Send bond
+
+```bash
+cd ../send
+```
+Create another `epm.yaml` that looks like:
+```yaml
+jobs:
+
+- name: bond_account
+  job:
+    set:
+      val: $addr_new
+
+- name: bond_pub_key
+  job:
+    set:
+      val: $pub_new
+
+- name: bond_amount
+  job:
+    set:
+      val: 1234
+
+- name: bondTest1
+  job:
+    bond:
+      pub_key: $bond_pub_key
+      account: $bond_account
+      amount: $bond_amount
+      wait: false
+
+- name: queryBonded
+  job:
+    query-vals:
+      field: bonded_validators
+
+- name: assertBonded
+  job:
+    assert:
+      key: $bond_account
+      relation: eq
+      val: $queryBonded
+```
+using the same hardcoded `$addr_new` and `$pub_new` as in the previous sections. 
+
 # Unbonding
+### With exec/mintx
+
+### With epm
 
 # Where to next?
-
-The burrow.
+- epm specification
+- more info...
+- the burrow.
