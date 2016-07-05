@@ -38,85 +38,85 @@ eris services
 Basically, services are daemons or microservices which you need for the applications you are running. "Things that you turn on or off." They are quick to boot, easy to share, and very customizable. Basically they're docker images. But in order to explore what this even means, we need to edit the `app.js` so it does a few things differently than the little cli version of idi we built before.
 
 ```javascript
-'use strict'
+'use strict';
 
-var contracts = require('eris-contracts')
-var fs = require('fs')
-var http = require('http')
-var address = require('./epm.json').deployStorageK
-var abi = JSON.parse(fs.readFileSync('./abi/' + address, 'utf8'))
-var accounts = require('./accounts.json')
-var chainUrl
-var manager
-var contract
-var server
+var contracts = require('eris-contracts');
+var fs = require('fs');
+var http = require('http');
+var address = require('./epm.json').deployStorageK;
+var abi = JSON.parse(fs.readFileSync('./abi/' + address, 'utf8'));
+var accounts = require('./accounts.json');
+var chainUrl;
+var manager;
+var contract;
+var server;
 
-chainUrl = 'http://localhost:1337/rpc'
+chainUrl = 'http://simplechain:1337/rpc';
 
 // Instantiate the contract object manager using the chain URL and the account
 // data.
 manager = contracts.newContractManagerDev(chainUrl,
-  accounts.simplechain_full_000)
+  accounts.simplechain_full_000);
 
 // Instantiate the contract object using the ABI and the address.
-contract = manager.newContractFactory(abi).at(address)
+contract = manager.newContractFactory(abi).at(address);
 
 // Create an HTTP server.
 server = http.createServer(function (request, response) {
-  var body
-  var value
+  var body;
+  var value;
 
   switch (request.method) {
     case 'GET':
-      console.log("Received request to get Idi's number.")
+      console.log("Received request to get Idi's number.");
 
       // Get the value from the contract and return it to the HTTP client.
       contract.get(function (error, result) {
         if (error) {
-          response.statusCode = 500
+          response.statusCode = 500;
+          console.error(error);
         } else {
-          response.statusCode = 200
-          response.setHeader('Content-Type', 'application/json')
-          response.write(JSON.stringify(result['c'][0]))
+          response.statusCode = 200;
+          response.setHeader('Content-Type', 'application/json');
+          response.write(JSON.stringify(result['c'][0]));
         }
 
-        response.end('\n')
-      })
+        response.end('\n');
+      });
 
-      break
+      break;
 
     case 'PUT':
-      body = ''
+      body = '';
 
       request.on('data', function (chunk) {
-        body += chunk
-      })
+        body += chunk;
+      });
 
       request.on('end', function () {
-        value = JSON.parse(body)
-        console.log("Received request to set Idi's number to " + value + '.')
+        value = JSON.parse(body);
+        console.log("Received request to set Idi's number to " + value + '.');
 
         // Set the value in the contract.
         contract.set(value, function (error) {
-          response.statusCode = error ? 500 : 200
-          response.end()
+          response.statusCode = error ? 500 : 200;
+          response.end();
         })
-      })
+      });
 
-      break
+      break;
 
     default:
-      response.statusCode = 501
-      response.end()
+      response.statusCode = 501;
+      response.end();
   }
-})
+});
 
 // Tell the server to listen to incoming requests on the port specified in the
 // environment.
 server.listen(process.env.IDI_PORT, function () {
-  console.log('Listening for HTTP requests on port ' + process.env.IDI_PORT +
-    '.')
-})
+  console.log('Listening for HTTP requests on port ' + process.env.IDI_PORT + '.')
+});
 ```
 
 Copy this as the new `app.js`. **Protip:** Get it (after `rm app.js`) with `curl -X GET https://raw.githubusercontent.com/eris-ltd/coding/master/contracts/idi/new_app.js -o app.js`.
