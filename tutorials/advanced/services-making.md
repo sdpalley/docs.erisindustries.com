@@ -80,7 +80,7 @@ Maybe you want to chattier output to see what's going on under the hood? Add `--
 ```bash
 eris chains ls -a
 eris chains logs bob
-eris chains plop bob genesis
+eris chains cat bob genesis
 ```
 
 All endpoints are available via `http://HostIP:46657`. You can see a sample [here](http://pinkpenguin.interblock.io:46657). Notice a few things for your chain:
