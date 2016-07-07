@@ -85,7 +85,8 @@ mkdir send bond
 cd send
 ```
 Now, create an `epm.yaml` that looks like:
-```yaml
+
+```
 jobs:
 
 - name: amt
@@ -118,6 +119,7 @@ jobs:
       relation: eq
       val: $amt
 ```
+
 and replace `$addr_new` with the hardcoded value. Then run:
 ```bash
 eris pkgs do --chain bonding --address $addr_machine --machine bonding
@@ -130,7 +132,8 @@ If everything went well, you'll see `Assertion Succeeded` and there will be an `
 cd ../send
 ```
 Create another `epm.yaml` that looks like:
-```yaml
+
+```
 jobs:
 
 - name: bond_account
@@ -168,6 +171,7 @@ jobs:
       relation: eq
       val: $queryBonded
 ```
+
 using the same hardcoded `$addr_new` and `$pub_new` as in the previous sections. 
 
 # Unbonding
