@@ -40,6 +40,7 @@ and simple to wrangle the dragons of smart contract blockchains.
 - [In Depth: Getting Started with Eris In the Cloud](/tutorials/advanced/cloud-getting-started)
 - [In Depth: Create An Advanced Permissioned Chain](/tutorials/advanced/chain-making)
 - [In Depth: Deploy Your Advanced Permissioned Chain to Cloud Instances, and Connect it to Peer Network](/tutorials/advanced/chain-deploying)
+- [In Depth: Bonding and Unbonding New Peers to an Existing Chain](/tutorials/advanced/bond-unbond)
 - [In Depth: Working with Complex Smart Contract Suites From Eris](/tutorials/advanced/contracts-deploying)
 - [In Depth: All About Services: Toadserver](/tutorials/advanced/services-making/)
 

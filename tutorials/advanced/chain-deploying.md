@@ -188,4 +188,4 @@ done
 
 # Where to next?
 
-**Let us [learn how to do some maintenance on these chains](/tutorials/advanced/chain-maintaining).**
+**Let us [learn how to do some maintenance on these chains](/tutorials/advanced/chain-maintaining) or [learn how to bond & unbond validators on your chain](/tutorials/advanced/bond-unbond).**
