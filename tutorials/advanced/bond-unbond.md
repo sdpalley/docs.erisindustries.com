@@ -86,7 +86,7 @@ cd send
 ```
 Now, create an `epm.yaml` that looks like:
 
-```
+```yaml
 jobs:
 
 - name: amt
@@ -133,7 +133,7 @@ cd ../send
 ```
 Create another `epm.yaml` that looks like:
 
-```
+```yaml
 jobs:
 
 - name: bond_account
