@@ -171,8 +171,12 @@ jobs:
 using the same hardcoded `$addr_new` and `$pub_new` as in the previous sections. 
 
 # Unbonding
+
 ### With exec/mintx
+The concept is no different than bonding, simply `eris chains exec bonding "mintx unbond ..."` with the appropriate flags and you'll be set. Note that unbond address was already given in the bond transaction.
+
 ### With epm
+See [this test in eris-pm](https://github.com/eris-ltd/eris-pm/tree/3a9023c8868a03a1b13d2122a6f5340b52c14b4b/tests/fixtures/app04-bonding_unbonding_rebonding_tx_and_validation_status) for more information on the bond/unbond/rebond pipeline. Note that the `epm.yaml`'s in this tutorial are modified from that test.
 
 # Where to next?
-- for more info on the `epm.yaml` specification, see 1) [the documentation on epm](/documentation/eris-pm) and follow the links for jobs/assert specs and 2) [the tests fixtures for epm](https://github.com/eris-ltd/eris-pm/tree/master/tests/fixtures) which describe many common actions.
+- for more info on the `epm.yaml` specification, see 1) [the documentation on epm](/documentation/eris-pm) and follow the links for jobs/query/assert specs and 2) [the tests fixtures for epm](https://github.com/eris-ltd/eris-pm/tree/master/tests/fixtures) which describe many common actions.
