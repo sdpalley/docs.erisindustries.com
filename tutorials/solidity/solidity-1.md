@@ -61,17 +61,17 @@ contract HelloSystem {
 
 ## Deploying and removing contracts
 
-The `HelloSystem` contract can be deployed as-is without any problems, but once it's been deployed it will remain on the chain for good. We need a way to remove it. In Solidity, the command for removing (or suiciding) a contract is this: `suicide(addr)`. The argument here is the address to which any remaining funds should be sent. In order to expose this functionality, we need to put it inside a (implicitly public) function. This is what a suicide function could look like in `HelloSystem`:
+The `HelloSystem` contract can be deployed as-is without any problems, but once it's been deployed it will remain on the chain for good. We need a way to remove it. In Solidity, the command for removing (or suiciding) a contract is this: `selfdestruct(addr)`. The argument here is the address to which any remaining funds should be sent. In order to expose this functionality, we need to put it inside a (implicitly public) function. This is what a selfdestruct function could look like in `HelloSystem`:
 
 ```javascript
 contract HelloSystem {
     function remove() {
-        suicide(msg.sender);
+        selfdestruct(msg.sender);
     }
 }
 ```
 
-What this would do is to remove the contract when the `remove` function is called, and it would return any funds it may have to the caller. Needless to say, this is not ideal. Normally when you add a suicide function you want to restrict the access to it. The simplest way of doing it is to store the address of the contract creator when the contract is deployed, and only allow the creator to suicide it. Here is how that could be implemented:
+What this would do is to remove the contract when the `remove` function is called, and it would return any funds it may have to the caller. Needless to say, this is not ideal. Normally when you add a selfdestruct function you want to restrict the access to it. The simplest way of doing it is to store the address of the contract creator when the contract is deployed, and only allow the creator to call selfdestruct on it. Here is how that could be implemented:
 
 ```javascript
 contract HelloSystem {
@@ -85,7 +85,7 @@ contract HelloSystem {
 
     function remove() {
         if (msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
@@ -108,7 +108,7 @@ contract HelloSystem {
 
     function remove() {
         if (msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 }
@@ -152,7 +152,7 @@ We're now going to make a simple bank account contract that lets people deposit 
 ```javascript
 contract Bank {
 
-    // We want an owner that is allowed to suicide.
+    // We want an owner that is allowed to selfdestruct.
     address owner;
 
     mapping (address => uint) balances;
@@ -178,7 +178,7 @@ contract Bank {
 
     function remove() {
         if (msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
@@ -224,7 +224,7 @@ contract Bank {
 
     function remove() {
         if (msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 }
@@ -413,7 +413,7 @@ contract Bank {
 
     function remove() {
         if (msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
@@ -460,7 +460,7 @@ contract FundManager {
     // *************************************************************************
 
     // We're responsible for this now that we're the owner of the banks.
-    function suicideBank(address addr) {
+    function selfdestructBank(address addr) {
         if (msg.sender != owner){
             return;
         }
@@ -591,7 +591,7 @@ contract Doug {
 
     // This is where we keep all the contracts.
     mapping (bytes32 => address) contracts;
-    
+
     modifier onlyOwner { //a modifier to reduce code replication
         if (msg.sender == owner) // this ensures that only the owner can access the function
             _
@@ -614,7 +614,7 @@ contract Doug {
     }
 
     function remove() onlyOwner {
-        suicide(owner);
+        selfdestruct(owner);
     }
 
 }
@@ -698,7 +698,7 @@ contract DougEnabled {
     // Makes it so that Doug is the only contract that may kill it.
     function remove(){
         if(msg.sender == DOUG){
-            suicide(DOUG);
+            selfdestruct(DOUG);
         }
     }
 
@@ -732,7 +732,7 @@ contract Doug {
         return true;
     }
 
-    // Remove a contract from Doug. We could also suicide if we want to.
+    // Remove a contract from Doug. We could also selfdestruct if we want to.
     function removeContract(bytes32 name) onlyOwner returns (bool result) {
         if (contracts[name] == 0x0){
             return false;
@@ -757,7 +757,7 @@ contract Doug {
 
         // Finally, remove doug. Doug will now have all the funds of the other contracts,
         // and when suiciding it will all go to the owner.
-        suicide(owner);
+        selfdestruct(owner);
     }
 
 }

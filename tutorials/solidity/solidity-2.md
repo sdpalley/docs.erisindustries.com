@@ -128,7 +128,7 @@ contract Doug {
         return true;
     }
 
-    // Remove a contract from Doug. We could also suicide if we want to.
+    // Remove a contract from Doug. We could also selfdestruct if we want to.
     function removeContract(bytes32 name) returns (bool result) {
        address cName = contracts[name];
         if (cName == 0x0){
@@ -145,7 +145,7 @@ contract Doug {
 
     function remove(){
         if(msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
@@ -204,7 +204,7 @@ contract DougEnabled {
     // Makes it so that Doug is the only contract that may kill it.
     function remove(){
         if(msg.sender == DOUG){
-            suicide(DOUG);
+            selfdestruct(DOUG);
         }
     }
 
@@ -856,7 +856,7 @@ contract DougEnabled {
     // Makes it so that Doug is the only contract that may kill it.
     function remove(){
         if(msg.sender == DOUG){
-            suicide(DOUG);
+            selfdestruct(DOUG);
         }
     }
 
@@ -1105,7 +1105,7 @@ contract Doug {
        return true;
   }
 
-    // Remove a contract from Doug. We could also suicide if we want to.
+    // Remove a contract from Doug. We could also selfdestruct if we want to.
     function removeContract(bytes32 name) returns (bool result) {
        address cName = contracts[name];
        if (cName == 0x0){
@@ -1128,7 +1128,7 @@ contract Doug {
 
     function remove(){
         if(msg.sender == owner){
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
@@ -1416,7 +1416,7 @@ contract DougDb {
        return true;
     }
 
-    // Remove a contract from Doug (we could also suicide the contract if we want to).
+    // Remove a contract from Doug (we could also selfdestruct the contract if we want to).
     function _removeElement(bytes32 name) internal returns (bool result) {
 
        Element elem = list[name];
@@ -1481,8 +1481,8 @@ contract Doug is DougDb {
 
     /// @notice Add a contract to Doug. This contract should extend DougEnabled, because
     /// Doug will attempt to call 'setDougAddress' on that contract before allowing it
-    /// to register. It will also ensure that the contract cannot be suicided by anyone
-    /// other then Doug. Finally, Doug allows over-writing of previous contracts with
+    /// to register. It will also ensure that the contract cannot be selfdestructed by anyone
+    /// other than Doug. Finally, Doug allows over-writing of previous contracts with
     /// the same name, thus you may replace contracts with new ones.
     /// @param name The bytes32 name of the contract.
     /// @param addr The address to the actual contract.
@@ -1532,12 +1532,12 @@ contract Doug is DougDb {
       return list[name].contractAddress;
     }
 
-    /// @notice Remove (suicide) Doug.
+    /// @notice Remove (selfdestruct) Doug.
     function remove(){
         if(msg.sender == owner){
             // Finally, remove doug. Doug will now have all the funds of the other contracts,
             // and when suiciding it will all go to the owner.
-            suicide(owner);
+            selfdestruct(owner);
         }
     }
 
