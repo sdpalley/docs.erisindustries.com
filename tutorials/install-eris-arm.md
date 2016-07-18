@@ -76,7 +76,7 @@ Let's assume that you have a brand new Raspberry Pi board for this section. If y
    reboot && login as {USRR} 
    sudo userdel -r pi 
    ```
-6. Install frequently tools and applications for IoT development.
+6. Install frequently used tools and applications for IoT development.
 
    ```bash
    sudo apt-get install -y --no-install-recommends \ 
@@ -93,7 +93,7 @@ We're going to use [Hypriot](http://blog.hypriot.com/downloads/) docker to provi
 sudo sed -i 's/ID=raspbian/ID=debian/g' /etc/os-release
 ```
 
-### Install hypriot docker on the swarm nodes and copy ssh login keys from DM to swarm nodes
+### Install hypriot docker on the swarm nodes and copy ssh login credentials from DM to swarm nodes
 
 ```bash
 wget https://downloads.hypriot.com/docker-hypriot_{VERSION}_armhf.deb \
@@ -139,7 +139,7 @@ To unset the swarm docker environment, `docker-machine env --unset`.
 
 ## Install eris Debian package
 
-We built the Debian repo of eris command line tool to make it to be easily installed just by `apt-get`.
+We built the Debian repo of the eris command line tool to make it to be easily installed just by `apt-get`.
 
 ```bash
 curl https://eris-iot-repo.s3.amazonaws.com/eris-deb/APT-GPG-KEY | sudo apt-key add - 
