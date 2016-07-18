@@ -90,6 +90,8 @@ done
 
 **N.B.** even though the Docker images *are* available either on your host (if you're on Linux) or within the `eris` machine (if you're on OSX or Windows), they will not be available on the newly created machines. The above sequence will kick off redundant downloading of the images. **Please do not run** this tutorial if you are on a slow connection as it will take **a very long time** just to pull all the appropriate images. If your connection is reasonably fast, it should not take too long.
 
+**N.B. 2** `fast_sync` is a bool in the `config.toml` that should *always, by default* be set to `false`. The exception is when connecting a new peer/node to a long-running chain. Setting `fast_sync = true` will help the new peer sync faster than she otherwise would. *However, its behaviour is known to be unpredictable, especially with few validators and/or mulitple new peers trying to sync.* If you encounter problems with your chain, replace `true` with `false` and reset your chain.
+
 **Temporary Hack**
 
 That `cat | sed` sequence is ugly, we know. In upcoming releases we'll be addressing some of the friction here with our `eris remotes` command which will have more network level cognizance.

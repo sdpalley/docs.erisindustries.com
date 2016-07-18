@@ -79,7 +79,7 @@ For decentralized purists that may not like a single point of failure, a comma d
 docker-machine ip $(docker-machine ls -q)
 ```
 
-**End N.B.**
+**N.B. 2** `fast_sync` is a bool in the `config.toml` that should *always, by default* be set to `false`. The exception is when connecting a new peer/node to a long-running chain. Setting `fast_sync = true` will help the new peer sync faster than she otherwise would. *However, its behaviour is known to be unpredictable, especially with few validators and/or mulitple new peers trying to sync.* If you encounter problems with your chain, replace `true` with `false` and reset your chain.
 
 Note that in the `seeds` field you will use the IP address from docker-machine ip command rather than the `XX.XX.XX.XX` in the above.
 
