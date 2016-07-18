@@ -135,6 +135,9 @@ yum install eris-cli
 
 RPM support is still quite experimental, so please do let us know of any issues you have with this installation and we will make sure to address those as quickly as we can.
 
+### ARM Installation (IoT devices)
+[See this tutorial](/tutorials/install-eris-arm/) for more info on getting setup on IoT devices.
+
 ### Building From Source
 
 If you would like to build from source [see our documentation](/tutorials/install-source/).
