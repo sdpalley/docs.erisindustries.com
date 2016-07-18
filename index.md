@@ -43,6 +43,7 @@ and simple to wrangle the dragons of smart contract blockchains.
 - [In Depth: Bonding and Unbonding New Peers to an Existing Chain](/tutorials/advanced/bond-unbond)
 - [In Depth: Working with Complex Smart Contract Suites From Eris](/tutorials/advanced/contracts-deploying)
 - [In Depth: All About Services: Toadserver](/tutorials/advanced/services-making/)
+- [In Depth: Working with IoT devices and Eris](/tutorials/install-eris-arm)
 
 # Core Reference
 
