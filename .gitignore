@@ -11,3 +11,5 @@ _layouts/
 blog_base/
 node_modules/
 scripts/
+
+*.swp
