@@ -39,7 +39,7 @@ Let's assume that you have a brand new Raspberry Pi board for this section. If y
 
 3. Setup the wireless network.
 
-   If you are using RPi3 or have Wi-Fi dongle connected to RPi2, it's easy to get connection to network through the wireless interface `wlan0`.
+   If you are using RPi3 or have Wi-Fi dongle connected to RPi2, it's easy to get connected to network through the wireless interface `wlan0`.
 
    1. Edit the `/etc/network/interfaces` file to change the wlan0 from `manual` mode to `dhcp`
 
