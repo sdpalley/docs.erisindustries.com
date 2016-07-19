@@ -5,7 +5,7 @@ title: Tutorial | Install Eris blockchain tools on IoT (ARM) devices
 
 ---
 
-This tutorial uses Raspberry Pi 3 as referenced ARM device to demonstrate how to install eris blockchain tools on IoT devices.
+This tutorial uses Raspberry Pi 3 as referenced IoT device to demonstrate how to install eris blockchain tools on IoT devices.
 
 ## Prerequisite
 
@@ -16,18 +16,16 @@ This tutorial uses Raspberry Pi 3 as referenced ARM device to demonstrate how to
 
 ## Initialize your brand new Raspberry Pi
 
-We assume you have a brand new Raspberry Pi board for this section. If you already have one that has all the basic development tools, 
-skip these steps as you want.
+Let's assume that you have a brand new Raspberry Pi board for this section. If you are using one that has all the basic development tools, skip these steps as you want.
 
 1. Install Raspberry Pi through NOOBS installer or flash the Raspbian image directly to the micro-SD card.
-2. Boot the installed Raspbian system (default login credential {username: pi, password: raspberry}) and 
-   reconfigure the time zone:
+2. Boot the installed Raspbian system (default login credential {username: pi, password: raspberry}) and reconfigure the time zone:
 
    ```bash
    sudo dpkg-reconfigure tzdata
    ```
 
-   Reconfigure the keyboard to your country layout:
+   Reconfigure the keyboard corresponding to your country layout:
 
    ```bash
    sudo dpkg-reconfigure keyboard-configuration
@@ -69,8 +67,7 @@ skip these steps as you want.
 
 5. Create a new {USER} account and replace the default `pi` with {USER} in the sudoer file. 
 
-   Since the default `pi` account comes with low security credentials and over-privileged, it's more secure to create and use your own {USER} account 
-   instead of the default `pi` account.
+   Since the default `pi` account comes with low security configurations and over-privileged, it's more secure to create and use your own {USER} account instead of the default `pi` account.
 
    ```bash
    sudo  useradd -m -s /bin/bash {USER} 
@@ -79,7 +76,7 @@ skip these steps as you want.
    reboot && login as {USRR} 
    sudo userdel -r pi 
    ```
-6. Recommended tools and applications for IoT development.
+6. Install frequently used tools and applications for IoT development.
 
    ```bash
    sudo apt-get install -y --no-install-recommends \ 
@@ -88,19 +85,15 @@ skip these steps as you want.
 
 ## Install docker and swarm cluster management tools
 
-Using `docker-machine` with swarm let us manage the IoT nodes in a `master vs. slave` scheme, which orchestrates the IoT blockchain fleet elegantly.
-In the following description, we use **DM** to refer the docker machine node, **swarm master** to refer to the master node in the swarm protocol and 
-**swarm slave** to refer the slave nodes. There are one master node and multiple slave nodes. Use `-m` option to specify the node you want to run
-the eris blockchain.
+Using `docker-machine` with swarm lets us manage the IoT nodes in a `master vs. slave` scheme, which orchestrates the IoT blockchain fleet elegantly. In the following description, we use **DM** to refer the docker machine node, **swarm master** to refer the master node in the swarm protocol and **swarm slave** to refer the slave nodes. There are one master node and multiple slave nodes. Use `-m` option to specify the node you want to run the eris blockchain.
 
-Here we're going to use [Hypriot](http://blog.hypriot.com/downloads/) docker to provision the nodes. Since the hypriot docker use Hypriot OS as default 
-OS environment, we need to change the Raspbian release declaration file to make the provisioned OS compatible to the Hypriot OS:
+We're going to use [Hypriot](http://blog.hypriot.com/downloads/) docker to provision the nodes. Since the hypriot docker uses Hypriot OS as default OS environment, we need to change the Raspbian release declaration file to make the provisioned OS compatible to the Hypriot OS:
 
 ```bash
 sudo sed -i 's/ID=raspbian/ID=debian/g' /etc/os-release
 ```
 
-### Install hypriot docker on the swarm nodes and copy ssh login key from DM to swarm nodes
+### Install hypriot docker on the swarm nodes and copy ssh login credentials from DM to swarm nodes
 
 ```bash
 wget https://downloads.hypriot.com/docker-hypriot_{VERSION}_armhf.deb \
@@ -146,7 +139,7 @@ To unset the swarm docker environment, `docker-machine env --unset`.
 
 ## Install eris Debian package
 
-We built the Debian repo for the eris blockchain tools to make it to be easily installed by `apt-get`.
+We built the Debian repo of the eris command line tool to make it to be easily installed just by `apt-get`.
 
 ```bash
 curl https://eris-iot-repo.s3.amazonaws.com/eris-deb/APT-GPG-KEY | sudo apt-key add - 
