@@ -24,7 +24,7 @@ eris init --yes --machine bonding
 The chain is made locally but `new`d (started) on the recently created `docker-machine`.
 ```bash
 eris chains make --chain-type=simplechain bonding
-eris chains new bonding --dir ~/.eris/chain/bonding --machine bonding
+eris chains new bonding --dir ~/.eris/chains/bonding --machine bonding
 ```
 
 Now grab the `docker-machine ip bonding` and go to `ip:46657` in your browser. You should see the exposed endpoints. Try also `eris chains ls --machine bonding`.
