@@ -31,7 +31,7 @@ Now grab the `docker-machine ip bonding` and go to `ip:46657` in your browser. Y
 
 ### Generate a new key locally
 ```bash
-$addr=$(eris keys gen)
+addr=$(eris keys gen)
 rm ~/.eris/chains/bonding/priv_validator.json
 eris keys convert $addr > ~/.eris/chains/bonding/priv_validator.json
 cp ~/.eris/chains/default/config.toml ~/.eris/chains/bonding
@@ -59,7 +59,7 @@ where `--amt` is the amount to be sent from the validator (`--addr $addr_machine
 If the command was successfull, you'll see `Transaction Hash:` and in the browser: `ip:46657/list_accounts` will show `$addr_new` with the amount specified. This account can now bond.
 
 ### Send a bond tx from new account
-We'll need the pubkey: `$pub_new=$(eris keys pub $addr_new)`
+We'll need the pubkey: `pub_new=$(eris keys pub $addr_new)`
 ```bash
 eris chains exec bonding "mintx bond --amt 150000 --pubkey $pub_new --to $addr_new --chainID bonding --node-addr=ip:46657 --sign-addr=keys:4767 --sign --broadcast"
 ```
