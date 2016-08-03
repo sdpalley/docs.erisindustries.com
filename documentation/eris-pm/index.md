@@ -5,7 +5,7 @@ title: "eris:package_manager Version Documentation"
 
 ---
 
-[Latest](0.11.4/epm)
+[0.12.0](0.12.0/epm)
 
 [0.11.4](0.11.4/epm)
 

@@ -5,7 +5,7 @@ title: "eris:keys Version Documentation"
 
 ---
 
-[Latest](latest/eris-keys/)
+[0.12.0](0.12.0/eris-keys/) (current master branch)
 
 [0.11.3](0.11.3/eris-keys/)
 
