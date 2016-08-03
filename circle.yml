@@ -3,6 +3,11 @@ general:
     only:
       - master
 
+dependencies:
+  pre:
+    - echo "export rvm_ignore_gemsets_flag=1" >> ~/.rvmrc
+    - gem install bundler
+
 test:
   override:
     - bundle exec rake prepare
