@@ -33,8 +33,12 @@ $ eris-cm make myChain --csv /path/to/csv -- will use the csv file to make your 
   -t, --account-types=[]: what number of account types should we use? find these in ~/.eris/chains/account_types; incompatible with and overrides chain-type; default respects $ERIS_CHAINMANAGER_ACCOUNTTYPES
   -c, --chain-type="": which chain type definition should we use? find these in ~/.eris/chains/chain_types; default respects $ERIS_CHAINMANAGER_CHAINTYPE
   -s, --csv-file="": csv file in the form `account-type,number,tokens,toBond,perms; default respects $ERIS_CHAINMANAGER_CSVFILE
+      --entrypoint="erisdb-wrapper": specifiy the entrypoint for the chain service; default respects $ERIS_CHAINMANAGER_CONTAINER_ENTRYPOINT
+      --image-name="quay.io/eris/erisdb:0.12.0-rc3": specify the chain image name; default respects $ERIS_CHAINMANAGER_CHAIN_IMAGE_NAME
   -k, --keys-server="http://localhost:4767": keys server which should be used to generate keys; default respects $ERIS_KEYS_PATH
+      --ports=[1337,46656,46657]: list the ports that need to be exported on the container; default respects $ERIS_CHAINMANAGER_EXPORTED_PORTS
   -r, --tar[=false]: instead of making directories in ~/.chains, make tarballs; incompatible with and overrides zip; default respects $ERIS_CHAINMANAGER_TARBALLS
+      --use-data-container[=true]: set whether to attach the data container to the chain; default respects $ERIS_CHAINMANAGER_USE_DATA_CONTAINER
   -z, --zip[=false]: instead of making directories in ~/.chains, make zip files; default respects $ERIS_CHAINMANAGER_ZIPFILES
 ```
 
