@@ -111,7 +111,7 @@ We distribute binaries via our [Github Releases Page](https://github.com/eris-lt
 We have (beta) `apt-get` support for most current versions of Debian and Ubuntu. If you wish to use apt-get to install `eris` then you will simply perform the following:
 
 ```bash
-sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys DDA1D0AB
+sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys 7D1F8F5A
 sudo su -c "echo deb https://apt.eris.industries DIST main > /etc/apt/sources.list.d/eris.list"
 ```
 
