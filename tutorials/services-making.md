@@ -176,7 +176,7 @@ eris pkgs do --chain simplechain --address $addr
 If you get an _accounts not registered_ error, then check the following:
 
 * What are your addresses (`cat $chain_dir/addrX`)?
-* Are those addresses known to eris keys (`eris actions do keys list`)?
+* Are those addresses known to eris keys (`eris keys ls --container`)?
 * Are those addresses in the genesis block (`eris chains cat simplechain genesis`)?
 * What account does your `epm.yaml` use (`cat ~/.eris/apps/idi/epm.yaml`)?
 * What account does your `account.json` use (`cat ~/.eris/apps/idi-service/account.json`)?
