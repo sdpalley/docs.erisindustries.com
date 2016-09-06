@@ -10,7 +10,7 @@ set -o xtrace
 chain_dir=$HOME/.eris/chains/simplechain
 
 # Clean up any previous test artifacts first.
-eris chains rm --force simplechain
+! eris chains rm --force simplechain
 rm -rf $chain_dir
 
 chain_dir_this=$chain_dir/simplechain_full_000
