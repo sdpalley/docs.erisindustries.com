@@ -24,7 +24,7 @@ eris init --yes --machine bonding
 The chain is made locally but `new`d (started) on the recently created `docker-machine`.
 ```bash
 eris chains make --chain-type=simplechain bonding
-eris chains new bonding --dir ~/.eris/chains/bonding --machine bonding
+eris chains start bonding --init-dir ~/.eris/chains/bonding --machine bonding
 ```
 
 Now grab the `docker-machine ip bonding` and go to `ip:46657` in your browser. You should see the exposed endpoints. Try also `eris chains ls --machine bonding`.
@@ -40,7 +40,7 @@ First we updated the `priv_validator.json` with the new address then we dropped 
 
 ### Connect the new peer node
 ```bash
-eris chains new bonding --dir ~/.eris/chains/bonding
+eris chains start bonding --init-dir ~/.eris/chains/bonding
 ```
 The new peer will dial the seed and connect to it. Go back to the browser and see the `/net_info` endpoint; the new peer should be there. Note: it will take this peer some time to catchup on blocks. There should still only be one account at `/list_accounts` currently. 
 

@@ -210,7 +210,7 @@ You'll get a `genesis.json` and `priv_validator.json` in `$chain_dir_this`.
 With all the files prepared we're ready to rock and roll.
 
 ```bash
-eris chains new simplechain --dir $chain_dir_this
+eris chains start simplechain --init-dir $chain_dir_this
 ```
 
 Check that the chain is running with:

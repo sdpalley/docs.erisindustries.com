@@ -148,7 +148,7 @@ eris chains start simplechain
 If your simplechain is not present, then just start it with:
 
 ```bash
-eris chains new simplechain --dir simplechain
+eris chains start simplechain --init-dir simplechain
 ```
 
 As usual, `eris` is a quiet tool. Let's make sure our chain is running:

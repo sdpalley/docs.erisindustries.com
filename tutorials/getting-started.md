@@ -163,7 +163,7 @@ If you want to create your blockchain it is very easy.
 ```bash
 eris services start keys
 eris chains make test_chain --chain-type simplechain
-eris chains new test_chain --dir ~/.eris/chains/test_chain
+eris chains start test_chain --init-dir ~/.eris/chains/test_chain
 ```
 
 That `test_chain` can be whatever name you would like it to be. This simple command will create a permissioned, smart contract enabled blockchain suitable for testing.
@@ -183,10 +183,10 @@ eris chains rm -xf test_chain
 Obviously, you will want an ability to make chains which you properly parameterize. As such you can always type:
 
 ```bash
-eris chains new --help
+eris chains start --help
 ```
 
-To see the various ways which you can give to chains new for it to be instantiated properly.
+To see the various ways which you can give to chains start for it to be instantiated properly.
 
 Eris does not only work with permissioned smart contract networks. It works just as well with existing blockchains. Want to run bitcoin?
 

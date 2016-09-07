@@ -79,7 +79,7 @@ eris keys pub ADDR
 
 ## Convert key to tendermint format
 
-This command will soon be deprecated in favour of adding a pubkey to `config.toml` rather than loading a `priv_validator.json` on `eris chains new`. In the meantime, it takes an `eris-keys` format key and converts it to a tendermint format priv validator.
+This command will soon be deprecated in favour of adding a pubkey to `config.toml` rather than loading a `priv_validator.json` on `eris chains start`. In the meantime, it takes an `eris-keys` format key and converts it to a tendermint format priv validator.
 
 ```bash
 eris keys convert ADDR

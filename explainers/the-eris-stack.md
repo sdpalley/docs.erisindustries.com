@@ -77,7 +77,7 @@ Either you do this all yourself and distribute the keys or ask each user to gene
 
 It is always possible to update the validator set with a bond/unbond transaction, or, if they misbehave, their security deposit (bond) can be slashed: validator they are no longer. (More details in a future post).
 
-It's time to start bringing nodes online. The first node starts up and peers can join like so: a seed of the master node's IP:port is added to their configuration file (`config.toml`) used in the `eris chains new` sequence. So long as the peer coming online has a key that:
+It's time to start bringing nodes online. The first node starts up and peers can join like so: a seed of the master node's IP:port is added to their configuration file (`config.toml`) used in the `eris chains start` sequence. So long as the peer coming online has a key that:
 
 1. can sign (via the `eris:keys` service); and
 2. is included in the genesis file; then it'll join the network.

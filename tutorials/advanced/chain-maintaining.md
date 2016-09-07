@@ -82,7 +82,7 @@ do
     sed -e 's/fast_sync.*$/fast_sync = true/g' \
     > ~/.eris/chains/$chain_name/"$chain_name"_validator_00"$i"/config.toml
   # start the chain on this machine with a logs rotator on (a good practice for validator nodes)
-  eris chains new --dir $chain_name/"$chain_name"_validator_00"$i" --machine "$machine_base-$i" --logrotate $chain_name
+  eris chains start --init-dir $chain_name/"$chain_name"_validator_00"$i" --machine "$machine_base-$i" --logrotate $chain_name
 done
 ```
 
@@ -109,7 +109,7 @@ The next step is to boot the chain locally and to make sure it is making blocks.
 cat ~/.eris/chains/$chain_name/"$chain_name"_validator_000/config.toml | \
   sed -e 's/moniker.*$/moniker = "imma_b_da_root"/g' \
   > ~/.eris/chains/$chain_name/"$chain_name"_root_000/config.toml
-eris chains new --dir $chain_name/"$chain_name"_root_000 $chain_name
+eris chains start --init-dir $chain_name/"$chain_name"_root_000 $chain_name
 sleep 10 # let it boot before we check the logs
 eris chains logs "$chain_name"
 ```

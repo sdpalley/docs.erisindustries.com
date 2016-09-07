@@ -71,7 +71,7 @@ Now we have everything set up; you should have each a `config.toml`, `priv_valid
 # Start your chain
 
 ```bash
-eris chains new bob --dir ~/.eris/chains/bob
+eris chains start bob --init-dir ~/.eris/chains/bob
 ```
 
 This creates and starts a new chain while copying the contents of the `bob` directory into the chain data container.
