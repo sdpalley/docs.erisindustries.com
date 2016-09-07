@@ -240,7 +240,7 @@ For maximum resilence, create machines in plenty of regions and on different pro
 
 **N.B.**
 
-If you're company has a subscription with a cloud provider, do not fret, docker-machine (probably) has you covered.
+If your company has a subscription with a cloud provider, do not fret, docker-machine (probably) [has you covered](https://docs.docker.com/machine/drivers/).
 
 **End N.B.**
 
